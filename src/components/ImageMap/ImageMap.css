@@ -1,0 +1,107 @@
+.image-map-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.presentation-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.image-map-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Hotspot styles - using Temenos colors */
+.hotspot {
+  fill: transparent;
+  stroke: transparent;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.hotspot:hover,
+.hotspot:focus {
+  fill: rgba(130, 70, 175, 0.25);  /* Energy Violet with transparency */
+  stroke: var(--temenos-renewal-green);
+  stroke-width: 1.5;
+  outline: none;
+  filter: drop-shadow(0 4px 8px rgba(130, 70, 175, 0.3));
+  animation: pulse-hover 2s ease-in-out infinite;
+}
+
+.hotspot:active {
+  fill: rgba(92, 184, 178, 0.4);  /* Renewal Green on click */
+  stroke: var(--temenos-energy-violet);
+  stroke-width: 2;
+  filter: drop-shadow(0 2px 4px rgba(92, 184, 178, 0.4));
+  transform: scale(0.98);
+  transition: all 0.1s ease;
+}
+
+/* Subtle pulse animation on hover */
+@keyframes pulse-hover {
+  0%, 100% {
+    fill-opacity: 1;
+  }
+  50% {
+    fill-opacity: 0.7;
+  }
+}
+
+/* Loading and error states */
+.image-map-loading,
+.image-map-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background-color: var(--temenos-light-blue);
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.image-map-error {
+  background-color: rgba(255, 59, 48, 0.1);
+  border: 2px dashed rgba(255, 59, 48, 0.3);
+}
+
+.image-map-error p {
+  color: #d32f2f;
+  margin: 0.5rem 0;
+}
+
+.image-map-error-hint {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.image-map-loading p {
+  color: var(--temenos-warm-blue);
+  font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .image-map-container {
+    max-width: 100%;
+  }
+
+  .hotspot {
+    /* Larger touch targets on mobile */
+    stroke-width: 2 !important;
+  }
+}

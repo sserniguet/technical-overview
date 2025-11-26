@@ -1,0 +1,7 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#c8d9f1"/>
+  <text x="600" y="100" font-family="Arial" font-size="48" fill="#283275" text-anchor="middle" font-weight="bold">Backend Services</text>
+  <text x="600" y="400" font-family="Arial" font-size="32" fill="#8246af" text-anchor="middle">Microservices Architecture</text>
+  <text x="600" y="450" font-family="Arial" font-size="24" fill="#666" text-anchor="middle">REST APIs • GraphQL • WebSockets</text>
+  <text x="600" y="500" font-family="Arial" font-size="24" fill="#666" text-anchor="middle">Message Queues • Caching • Load Balancing</text>
+</svg>
