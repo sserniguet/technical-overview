@@ -1,5 +1,18 @@
-import { PresentationConfig, PageConfig } from '../types/presentation.types';
+import { PresentationConfig, PageConfig, HotspotRegion } from '../types/presentation.types';
 import presentationData from '../config/presentation.json';
+
+/**
+ * Migrate old hotspot format to new format for backward compatibility
+ */
+function migrateHotspot(hotspot: any): HotspotRegion {
+  return {
+    ...hotspot,
+    // Default to 'navigation' if actionType is not specified (backward compatibility)
+    actionType: hotspot.actionType || 'navigation',
+    // Initialize content object if not present
+    content: hotspot.content || {}
+  };
+}
 
 /**
  * Load and validate the presentation configuration
@@ -16,7 +29,7 @@ export function loadPresentationConfig(): PresentationConfig {
     throw new Error('Invalid configuration: at least one page is required');
   }
 
-  // Validate each page
+  // Validate and migrate each page
   config.pages.forEach((page, index) => {
     if (!page.id || !page.path || !page.title || !page.image) {
       throw new Error(
@@ -35,6 +48,9 @@ export function loadPresentationConfig(): PresentationConfig {
         `Invalid configuration: page '${page.id}' hotspots must be an array`
       );
     }
+
+    // Migrate hotspots to new format for backward compatibility
+    page.hotspots = page.hotspots.map(migrateHotspot);
   });
 
   return config;

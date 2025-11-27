@@ -110,6 +110,47 @@
   }
 }
 
+/* Reveal mode - show all hotspots */
+g.revealed .hotspot {
+  fill: rgba(130, 70, 175, 0.2) !important;
+  stroke: var(--temenos-energy-violet) !important;
+  stroke-width: 2 !important;
+  animation: pulse-reveal 2s ease-in-out infinite;
+}
+
+@keyframes pulse-reveal {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Hotspot label styles */
+.hotspot-label {
+  background: linear-gradient(135deg, var(--temenos-warm-blue) 0%, var(--temenos-energy-violet) 100%);
+  color: var(--temenos-frost-white);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .image-map-container {
@@ -119,5 +160,10 @@
   .hotspot {
     /* Larger touch targets on mobile */
     stroke-width: 2 !important;
+  }
+
+  .hotspot-label {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
   }
 }

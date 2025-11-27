@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { loadPresentationConfig } from './utils/configLoader'
 import { ConfigProvider } from './context/ConfigContext'
+import { PresentationProvider } from './context/PresentationContext'
 import { Layout } from './components/Layout/Layout'
 import { PresentationPage } from './pages/PresentationPage'
 import { ConfigEditor } from './pages/ConfigEditor'
@@ -26,34 +27,36 @@ function App() {
 
   return (
     <ConfigProvider config={config}>
-      <Router>
-        <Routes>
-          {/* Config editor route - standalone without Layout */}
-          <Route path="/config" element={<ConfigEditor />} />
+      <PresentationProvider>
+        <Router>
+          <Routes>
+            {/* Config editor route - standalone without Layout */}
+            <Route path="/config" element={<ConfigEditor />} />
 
-          {/* Presentation routes with Layout */}
-          <Route
-            path="*"
-            element={
-              <Layout>
-                <Routes>
-                  {/* Dynamic routes from configuration */}
-                  {config.pages.map((page) => (
-                    <Route
-                      key={page.id}
-                      path={page.path}
-                      element={<PresentationPage page={page} />}
-                    />
-                  ))}
+            {/* Presentation routes with Layout */}
+            <Route
+              path="*"
+              element={
+                <Layout>
+                  <Routes>
+                    {/* Dynamic routes from configuration */}
+                    {config.pages.map((page) => (
+                      <Route
+                        key={page.id}
+                        path={page.path}
+                        element={<PresentationPage page={page} />}
+                      />
+                    ))}
 
-                  {/* 404 - redirect to home */}
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </Layout>
-            }
-          />
-        </Routes>
-      </Router>
+                    {/* 404 - redirect to first page */}
+                    <Route path="*" element={<Navigate to={config.pages[0].path} replace />} />
+                  </Routes>
+                </Layout>
+              }
+            />
+          </Routes>
+        </Router>
+      </PresentationProvider>
     </ConfigProvider>
   )
 }

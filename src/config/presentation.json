@@ -2,7 +2,7 @@
   "pages": [
     {
       "id": "TechnologyPrinciple",
-      "path": "/TechnologyPrinciple",
+      "path": "/",
       "title": "Temenos Technical Concepts",
       "description": "Temenos provides you key technology principles",
       "image": "/images/TechnologyPrinciple.png",
@@ -148,7 +148,32 @@
       "description": "Page for Integration",
       "image": "/images/Integration (1).png",
       "showInNav": true,
-      "hotspots": [],
+      "hotspots": [
+        {
+          "id": "hotspot-1764263684320",
+          "shape": "rect",
+          "coords": {
+            "x": 60,
+            "y": 15,
+            "width": 10,
+            "height": 10
+          },
+          "targetPage": "/api",
+          "label": "API"
+        },
+        {
+          "id": "hotspot-1764264814558",
+          "shape": "rect",
+          "coords": {
+            "x": 70,
+            "y": 30,
+            "width": 10,
+            "height": 20
+          },
+          "targetPage": "/eventstreaming",
+          "label": "Event"
+        }
+      ],
       "parent": "TechnologyPrinciple"
     },
     {
@@ -178,7 +203,20 @@
       "description": "Monitoring and Observability",
       "image": "/images/Observability1.png",
       "showInNav": true,
-      "hotspots": [],
+      "hotspots": [
+        {
+          "id": "hotspot-1764265016625",
+          "shape": "rect",
+          "coords": {
+            "x": 25,
+            "y": 0,
+            "width": 50,
+            "height": 50
+          },
+          "targetPage": "/observability2",
+          "label": "Obs2"
+        }
+      ],
       "parent": "TechnologyPrinciple"
     },
     {
@@ -188,7 +226,20 @@
       "description": "Page for Observability2",
       "image": "/images/Observability2.png",
       "showInNav": false,
-      "hotspots": [],
+      "hotspots": [
+        {
+          "id": "hotspot-1764265055854",
+          "shape": "rect",
+          "coords": {
+            "x": 25,
+            "y": 0,
+            "width": 50,
+            "height": 50
+          },
+          "targetPage": "/observability1",
+          "label": "Obs1"
+        }
+      ],
       "parent": "observability1"
     },
     {
@@ -238,7 +289,20 @@
       "description": "All layers can be extended: from DB to UI",
       "image": "/images/Extensibility.png",
       "showInNav": true,
-      "hotspots": [],
+      "hotspots": [
+        {
+          "id": "hotspot-1764265156621",
+          "shape": "rect",
+          "coords": {
+            "x": 75,
+            "y": 10,
+            "width": 20,
+            "height": 50
+          },
+          "targetPage": "/workbench",
+          "label": "workbench"
+        }
+      ],
       "parent": "TechnologyPrinciple"
     },
     {

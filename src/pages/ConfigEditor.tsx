@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { PageConfig, PresentationConfig, HotspotRegion } from '../types/presentation.types';
+import { PageConfig, PresentationConfig, HotspotRegion, HotspotActionType } from '../types/presentation.types';
 import './ConfigEditor.css';
 
 const API_BASE = 'http://localhost:3001/api';
@@ -460,8 +460,10 @@ export function ConfigEditor() {
       id: `hotspot-${Date.now()}`,
       shape: 'rect',
       coords: { x: 25, y: 25, width: 50, height: 50 },
+      actionType: 'navigation',
       targetPage: config.pages[0]?.path || '/',
-      label: 'New Hotspot'
+      label: 'New Hotspot',
+      content: {}
     };
 
     const newPages = [...config.pages];
@@ -801,10 +803,25 @@ export function ConfigEditor() {
                   </button>
                 </div>
 
-                {selectedPage.hotspots.map((hotspot, hotspotIndex) => (
+                {selectedPage.hotspots.map((hotspot, hotspotIndex) => {
+                  // Get icon for hotspot type
+                  const getHotspotIcon = (actionType: HotspotActionType) => {
+                    switch (actionType) {
+                      case 'navigation': return '🔗';
+                      case 'external-link': return '🌐';
+                      case 'tooltip': return '💬';
+                      case 'text-popup': return '📝';
+                      case 'image-popup': return '🖼️';
+                      case 'video-popup': return '🎥';
+                      case 'iframe-popup': return '🎬';
+                      default: return '❓';
+                    }
+                  };
+
+                  return (
                   <div key={hotspot.id} className="hotspot-editor">
                     <div className="hotspot-header">
-                      <strong>Hotspot: {hotspot.label}</strong>
+                      <strong>{getHotspotIcon(hotspot.actionType)} Hotspot: {hotspot.label}</strong>
                       <button
                         className="btn-delete-small"
                         onClick={() => deleteHotspot(selectedPageIndex!, hotspotIndex)}
@@ -855,9 +872,34 @@ export function ConfigEditor() {
                       </div>
 
                       <div className="form-group">
+                        <label>Action Type</label>
+                        <select
+                          value={hotspot.actionType}
+                          onChange={(e) => {
+                            const actionType = e.target.value as HotspotActionType;
+                            updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              actionType,
+                              content: hotspot.content || {}
+                            });
+                          }}
+                        >
+                          <option value="navigation">🔗 Navigate to Page</option>
+                          <option value="external-link">🌐 External Link</option>
+                          <option value="tooltip">💬 Tooltip (Hover)</option>
+                          <option value="text-popup">📝 Text Popup</option>
+                          <option value="image-popup">🖼️ Image Popup</option>
+                          <option value="video-popup">🎥 Video Popup</option>
+                          <option value="iframe-popup">🎬 Iframe Demo</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Conditional fields based on action type */}
+                    {hotspot.actionType === 'navigation' && (
+                      <div className="form-group">
                         <label>Target Page</label>
                         <select
-                          value={hotspot.targetPage}
+                          value={hotspot.targetPage || ''}
                           onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
                             targetPage: e.target.value
                           })}
@@ -869,7 +911,236 @@ export function ConfigEditor() {
                           ))}
                         </select>
                       </div>
-                    </div>
+                    )}
+
+                    {hotspot.actionType === 'external-link' && (
+                      <div className="form-group">
+                        <label>External URL</label>
+                        <input
+                          type="url"
+                          placeholder="https://example.com"
+                          value={hotspot.content?.url || ''}
+                          onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                            content: { ...hotspot.content, url: e.target.value }
+                          })}
+                        />
+                      </div>
+                    )}
+
+                    {(hotspot.actionType === 'tooltip' || hotspot.actionType === 'text-popup') && (
+                      <>
+                        <div className="form-group">
+                          <label>Text Content</label>
+                          <textarea
+                            rows={4}
+                            placeholder="Enter text content..."
+                            value={hotspot.content?.text || ''}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, text: e.target.value }
+                            })}
+                          />
+                        </div>
+                        {hotspot.actionType === 'text-popup' && (
+                          <>
+                            <div className="form-group">
+                              <label>Popup Title</label>
+                              <input
+                                type="text"
+                                placeholder="Optional title"
+                                value={hotspot.content?.popupTitle || ''}
+                                onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                                  content: { ...hotspot.content, popupTitle: e.target.value }
+                                })}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>Popup Size</label>
+                              <select
+                                value={hotspot.content?.popupWidth || 'medium'}
+                                onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                                  content: { ...hotspot.content, popupWidth: e.target.value as any }
+                                })}
+                              >
+                                <option value="small">Small (600px)</option>
+                                <option value="medium">Medium (900px)</option>
+                                <option value="large">Large (1200px)</option>
+                                <option value="fullscreen">Fullscreen</option>
+                              </select>
+                            </div>
+                          </>
+                        )}
+                      </>
+                    )}
+
+                    {hotspot.actionType === 'image-popup' && (
+                      <>
+                        <div className="form-group">
+                          <label>Image URL</label>
+                          <input
+                            type="text"
+                            placeholder="/images/example.png"
+                            value={hotspot.content?.imageSrc || ''}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, imageSrc: e.target.value }
+                            })}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Image Alt Text</label>
+                          <input
+                            type="text"
+                            placeholder="Description of image"
+                            value={hotspot.content?.imageAlt || ''}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, imageAlt: e.target.value }
+                            })}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Popup Title</label>
+                          <input
+                            type="text"
+                            placeholder="Optional title"
+                            value={hotspot.content?.popupTitle || ''}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, popupTitle: e.target.value }
+                            })}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Popup Size</label>
+                          <select
+                            value={hotspot.content?.popupWidth || 'large'}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, popupWidth: e.target.value as any }
+                            })}
+                          >
+                            <option value="small">Small (600px)</option>
+                            <option value="medium">Medium (900px)</option>
+                            <option value="large">Large (1200px)</option>
+                            <option value="fullscreen">Fullscreen</option>
+                          </select>
+                        </div>
+                      </>
+                    )}
+
+                    {hotspot.actionType === 'video-popup' && (
+                      <>
+                        <div className="form-group">
+                          <label>Video URL (MP4/WebM)</label>
+                          <input
+                            type="text"
+                            placeholder="/videos/demo.mp4"
+                            value={hotspot.content?.videoSrc || ''}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, videoSrc: e.target.value }
+                            })}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Video Poster (Thumbnail)</label>
+                          <input
+                            type="text"
+                            placeholder="/images/video-thumb.png (optional)"
+                            value={hotspot.content?.videoPoster || ''}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, videoPoster: e.target.value }
+                            })}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={hotspot.content?.videoAutoplay || false}
+                              onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                                content: { ...hotspot.content, videoAutoplay: e.target.checked }
+                              })}
+                            />
+                            {' '}Autoplay when modal opens
+                          </label>
+                        </div>
+                        <div className="form-group">
+                          <label>Popup Title</label>
+                          <input
+                            type="text"
+                            placeholder="Optional title"
+                            value={hotspot.content?.popupTitle || ''}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, popupTitle: e.target.value }
+                            })}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Popup Size</label>
+                          <select
+                            value={hotspot.content?.popupWidth || 'large'}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, popupWidth: e.target.value as any }
+                            })}
+                          >
+                            <option value="small">Small (600px)</option>
+                            <option value="medium">Medium (900px)</option>
+                            <option value="large">Large (1200px)</option>
+                            <option value="fullscreen">Fullscreen</option>
+                          </select>
+                        </div>
+                      </>
+                    )}
+
+                    {hotspot.actionType === 'iframe-popup' && (
+                      <>
+                        <div className="form-group">
+                          <label>Iframe URL (HTTPS only)</label>
+                          <input
+                            type="url"
+                            pattern="https://.*"
+                            placeholder="https://example.com/demo"
+                            value={hotspot.content?.iframeSrc || ''}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, iframeSrc: e.target.value }
+                            })}
+                          />
+                          <small>Only HTTPS URLs are allowed for security</small>
+                        </div>
+                        <div className="form-group">
+                          <label>Iframe Title</label>
+                          <input
+                            type="text"
+                            placeholder="Demo environment"
+                            value={hotspot.content?.iframeTitle || ''}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, iframeTitle: e.target.value }
+                            })}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Popup Title</label>
+                          <input
+                            type="text"
+                            placeholder="Optional title"
+                            value={hotspot.content?.popupTitle || ''}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, popupTitle: e.target.value }
+                            })}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Popup Size</label>
+                          <select
+                            value={hotspot.content?.popupWidth || 'fullscreen'}
+                            onChange={(e) => updateHotspot(selectedPageIndex!, hotspotIndex, {
+                              content: { ...hotspot.content, popupWidth: e.target.value as any }
+                            })}
+                          >
+                            <option value="small">Small (600px)</option>
+                            <option value="medium">Medium (900px)</option>
+                            <option value="large">Large (1200px)</option>
+                            <option value="fullscreen">Fullscreen</option>
+                          </select>
+                        </div>
+                      </>
+                    )}
 
                     <div className="coords-editor">
                       <h4>Coordinates (0-100%)</h4>
@@ -982,7 +1253,8 @@ export function ConfigEditor() {
                       )}
                     </div>
                   </div>
-                ))}
+                );
+                })}
               </div>
             </div>
           ) : (
@@ -1082,7 +1354,7 @@ export function ConfigEditor() {
               <div className="form-group">
                 <label>Select Pages to Export ({selectedPageIds.size} selected)</label>
                 <div className="export-pages-list">
-                  {organizePages().map(({ page, index, depth }) => (
+                  {organizePages().map(({ page, depth }) => (
                     <div
                       key={page.id}
                       className="export-page-item"
