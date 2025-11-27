@@ -5,10 +5,18 @@ An interactive, configuration-driven presentation system for exploring technical
 ## Features
 
 - **🎨 Visual Configuration Editor**: Edit pages, upload images, and create hotspots using an intuitive UI - no JSON editing required!
+- **🎯 Enhanced Hotspot System**: 7 different action types for rich interactivity ⭐ NEW!
+  - 🔗 **Navigation** - Navigate to other pages
+  - 🌐 **External Links** - Open URLs in new tabs
+  - 💬 **Tooltips** - Show quick info on hover
+  - 📝 **Text Popups** - Display detailed text in modals
+  - 🖼️ **Image Popups** - Show images in modals
+  - 🎥 **Video Popups** - Play videos with HTML5 player
+  - 🎬 **Iframe Demos** - Embed live demos securely
+- **⌨️ Presentation Mode**: Press 'H' to reveal all hotspots during live presentations ⭐ NEW!
 - **📦 Page Backup & Restore**: Backup pages before removing them, restore when needed with automatic parent handling
 - **📤 Export/Import Presentations**: Export to internal library or download as ZIP, import from library or upload ZIP files
 - **🌐 Cross-System Sharing**: Share presentations via ZIP files, transfer between installations
-- **Interactive Clickable Images**: Click on regions of technical diagrams to navigate deeper into concepts
 - **Multiple Hotspot Shapes**: Support for rectangles, circles, and polygons
 - **Dual Configuration Methods**: Use visual editor OR edit JSON directly
 - **Auto-Hide Navigation**: Clean full-screen presentation with mouse-activated menus
@@ -212,6 +220,24 @@ Navigate through the sample pages:
 2. Update `src/config/presentation.json`
 3. The site automatically updates with Hot Module Replacement
 
+### 4. Using During Presentations
+
+**Presentation Mode - Reveal Hotspots:**
+
+Press the **'H' key** during your presentation to reveal all hotspots on the current page!
+
+- **Show Hotspots**: Labels appear above each clickable region with animated highlights
+- **Hide Hotspots**: Press 'H' again to return to clean view
+- **Perfect for Live Demos**: Show your audience exactly where they can click
+- **Works on Any Page**: Automatically adapts to all hotspot shapes and positions
+
+**Hotspot Interactions:**
+
+- **Hover** over tooltip hotspots (💬) for quick information
+- **Click** navigation hotspots (🔗) to explore other pages
+- **Click** popup hotspots (📝🖼️🎥🎬) to see detailed content
+- **Click** external links (🌐) to open documentation in new tabs
+
 ---
 
 ## Visual Configuration Editor
@@ -230,10 +256,17 @@ Navigate through the sample pages:
 - ✅ **Add/Edit Pages**: Create new pages with forms
 - ✅ **Upload Images**: Drag & drop image files
 - ✅ **Select Images**: Choose from dropdown of uploaded images
-- ✅ **Create Hotspots**: Add clickable regions visually
+- ✅ **Create Hotspots**: Add clickable regions visually with 7 action types! ⭐ NEW!
+  - 🔗 Navigate to pages
+  - 🌐 Link to external URLs
+  - 💬 Show tooltips on hover
+  - 📝 Display text popups
+  - 🖼️ Show images in modals
+  - 🎥 Play videos
+  - 🎬 Embed live demos
 - ✅ **Choose Shapes**: Rectangle, Circle, or Polygon from dropdown
 - ✅ **Set Coordinates**: Use number inputs (auto-validated 0-100)
-- ✅ **Link Pages**: Select target pages from dropdown
+- ✅ **Configure Actions**: Select action type and configure content per hotspot ⭐ NEW!
 - ✅ **Backup Pages**: Archive pages with images before removing
 - ✅ **Restore Backups**: Bring back archived pages with automatic parent handling
 - ✅ **Export to Library**: Export selected pages to internal storage
@@ -302,7 +335,9 @@ Add a new page object to the `pages` array:
 
 Hotspots are clickable regions on your images. All coordinates are **percentage-based (0-100)** for responsive scaling.
 
-#### Rectangle Hotspot
+**NEW!** Hotspots now support 7 different action types - see examples below!
+
+#### Navigation Hotspot (Classic)
 
 ```json
 {
@@ -314,9 +349,94 @@ Hotspots are clickable regions on your images. All coordinates are **percentage-
     "width": 30,
     "height": 40
   },
+  "actionType": "navigation",
   "targetPage": "/architecture/backend",
   "label": "Backend Services",
   "description": "Click to explore backend architecture"
+}
+```
+
+#### Tooltip Hotspot (Hover for Info)
+
+```json
+{
+  "id": "info-tip",
+  "shape": "circle",
+  "coords": { "cx": 50, "cy": 20, "r": 3 },
+  "actionType": "tooltip",
+  "label": "Information",
+  "content": {
+    "text": "This is a quick tooltip that appears on hover"
+  }
+}
+```
+
+#### Text Popup Hotspot
+
+```json
+{
+  "id": "details-popup",
+  "shape": "rect",
+  "coords": { "x": 10, "y": 10, "width": 20, "height": 15 },
+  "actionType": "text-popup",
+  "label": "More Details",
+  "content": {
+    "text": "Detailed explanation goes here...",
+    "popupTitle": "Technical Details",
+    "popupWidth": "medium"
+  }
+}
+```
+
+#### Video Popup Hotspot
+
+```json
+{
+  "id": "demo-video",
+  "shape": "rect",
+  "coords": { "x": 30, "y": 30, "width": 40, "height": 30 },
+  "actionType": "video-popup",
+  "label": "Watch Demo",
+  "content": {
+    "videoSrc": "/videos/demo.mp4",
+    "videoPoster": "/images/video-thumb.png",
+    "videoAutoplay": false,
+    "popupTitle": "Product Demo",
+    "popupWidth": "large"
+  }
+}
+```
+
+#### External Link Hotspot
+
+```json
+{
+  "id": "documentation",
+  "shape": "rect",
+  "coords": { "x": 70, "y": 10, "width": 25, "height": 10 },
+  "actionType": "external-link",
+  "label": "View Documentation",
+  "content": {
+    "url": "https://example.com/docs"
+  }
+}
+```
+
+#### Iframe Demo Hotspot
+
+```json
+{
+  "id": "live-demo",
+  "shape": "rect",
+  "coords": { "x": 40, "y": 50, "width": 50, "height": 40 },
+  "actionType": "iframe-popup",
+  "label": "Live Demo",
+  "content": {
+    "iframeSrc": "https://example.com/demo",
+    "iframeTitle": "Interactive Demo",
+    "popupTitle": "Try It Live",
+    "popupWidth": "fullscreen"
+  }
 }
 ```
 
@@ -357,9 +477,21 @@ Hotspots are clickable regions on your images. All coordinates are **percentage-
 | `id` | string | Yes | Unique identifier |
 | `shape` | string | Yes | "rect", "circle", or "polygon" |
 | `coords` | object | Yes | Shape-specific coordinates (see below) |
-| `targetPage` | string | Yes | Route to navigate to when clicked |
-| `label` | string | Yes | Accessible label for screen readers |
-| `description` | string | No | Additional context (not currently displayed) |
+| `actionType` | string | Yes | Action type: "navigation", "external-link", "tooltip", "text-popup", "image-popup", "video-popup", or "iframe-popup" |
+| `targetPage` | string | Conditional | Required for "navigation" type only |
+| `content` | object | Conditional | Required for non-navigation types (see examples above) |
+| `label` | string | Yes | Accessible label and hotspot title |
+| `description` | string | No | Additional context |
+
+**Action Types:**
+
+- **navigation**: Navigate to another page (classic behavior)
+- **external-link**: Open URL in new tab
+- **tooltip**: Show text on hover (no click)
+- **text-popup**: Show text in modal on click
+- **image-popup**: Show image in modal on click
+- **video-popup**: Play video in modal on click (MP4/WebM)
+- **iframe-popup**: Embed external content (HTTPS only)
 
 **Coordinate Systems:**
 

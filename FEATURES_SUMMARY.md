@@ -16,6 +16,46 @@
 - Real-time preview
 - Auto-save with live reload
 
+### 🎯 Enhanced Hotspot System
+
+**7 Action Types:**
+1. **Navigation** - Navigate to other pages (classic)
+2. **External Link** - Open URLs in new tabs
+3. **Tooltip** - Show info on hover (no click)
+4. **Text Popup** - Display text in modals
+5. **Image Popup** - Show images in modals
+6. **Video Popup** - Play videos (MP4/WebM)
+7. **Iframe Popup** - Embed live demos (HTTPS)
+
+**Presentation Mode:**
+- Press 'H' key to reveal all hotspots
+- Animated labels with positioning
+- Pulse animations on hotspots
+- Perfect for live demonstrations
+- Toggle on/off anytime
+
+**Content Configuration:**
+- Action type selector with emojis
+- Conditional fields per type
+- Popup size options (small/medium/large/fullscreen)
+- Video autoplay settings
+- Security warnings for iframes
+
+**User Experience:**
+- Loading states for async content
+- Error handling for failed loads
+- Tooltip smart positioning
+- Keyboard accessibility
+- ARIA labels for screen readers
+- Responsive across devices
+
+**Security:**
+- HTTPS-only for iframes
+- Sandbox attributes for isolation
+- noopener/noreferrer for external links
+- URL validation before rendering
+- Referrer policy enforcement
+
 ### 📦 Page Backup & Restore
 
 **Backup System (Replaces Delete):**
@@ -119,21 +159,23 @@ public/
 ### 🎯 Interactive Presentation Features
 
 **Core Presentation:**
-- Clickable image maps
-- Multiple hotspot shapes
+- Clickable image maps with 7 action types
+- Multiple hotspot shapes (rect, circle, polygon)
 - Responsive design
 - Auto-hide navigation
 - Breadcrumb trails
 - Hierarchical page structure
 - Parent-child relationships
 - Temenos brand colors
+- Presentation mode (reveal hotspots with 'H')
 
 **Navigation:**
 - Top navigation bar (auto-hide)
-- Click hotspots to navigate
+- Click hotspots to navigate, open links, or show content
 - Breadcrumb navigation
 - Back button
 - Hierarchical structure
+- External link support
 
 ### 🔐 Data Management
 
@@ -240,11 +282,15 @@ public/
 
 ## Statistics
 
-- **Total Features**: 40+
+- **Total Features**: 50+
 - **API Endpoints**: 11
 - **File Formats Supported**: 5 (PNG, JPG, SVG, GIF, WebP)
+- **Video Formats Supported**: 2 (MP4, WebM)
 - **Hotspot Shapes**: 3 (Rectangle, Circle, Polygon)
+- **Hotspot Action Types**: 7 (navigation, external-link, tooltip, text-popup, image-popup, video-popup, iframe-popup)
 - **Export Options**: 2 (Library, ZIP)
 - **Import Options**: 2 (Library, ZIP)
 - **Storage Locations**: 3 (images, backups, exports)
+- **Modal Content Types**: 4 (text, image, video, iframe)
+- **Keyboard Shortcuts**: 1 ('H' for reveal mode)
 - **Dependencies**: Minimal, focused stack
