@@ -18,6 +18,16 @@ export function TopNav({ pages }: TopNavProps) {
   return (
     <nav className="top-nav">
       <ul className="top-nav-list">
+        <li className="top-nav-item">
+          <a
+            href="/config"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="top-nav-link config-link"
+          >
+            ⚙️ Config
+          </a>
+        </li>
         {navPages.map((page) => {
           const isActive = location.pathname === page.path;
           return (

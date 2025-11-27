@@ -11,11 +11,22 @@ cd /home/sserniguet/technical-overview
 # Install dependencies (first time only)
 npm install
 
-# Start development server
-npm run dev
+# Start BOTH servers (recommended)
+npm run dev:all
 ```
 
-**Access**: Open http://localhost:5173 in your browser
+**OR start separately:**
+```bash
+# Terminal 1 - Frontend
+npm run dev
+
+# Terminal 2 - API Server (for Config Editor)
+npm run server
+```
+
+**Access**:
+- **Presentation**: http://localhost:5173
+- **Config Editor**: Click ⚙️ Config button (needs both servers running)
 
 ---
 
@@ -145,7 +156,29 @@ Edit `src/index.css`:
 
 ---
 
+## Using the Visual Config Editor
+
+**NEW: Edit configuration visually without touching JSON!**
+
+1. **Start both servers**: `npm run dev:all`
+2. **Open presentation**: http://localhost:5173
+3. **Move mouse to top** → Click **⚙️ Config** button
+4. **Edit visually**:
+   - Add/remove pages
+   - Upload images
+   - Create hotspots with forms
+   - Set coordinates with number inputs
+5. **Save** → Changes appear instantly!
+
+**See CONFIG_EDITOR_GUIDE.md for full documentation**
+
+---
+
 ## Need Help?
+
+### Config Editor shows "Loading configuration..."
+- **Problem**: API server not running
+- **Solution**: Run `npm run dev:all` or `npm run server` in separate terminal
 
 ### Image not showing?
 - Check path starts with `/images/`
@@ -161,6 +194,11 @@ Edit `src/index.css`:
 - Validate JSON at https://jsonlint.com
 - Ensure all required fields present
 - Check for trailing commas
+
+### Changes not appearing after save?
+- Make sure API server is running (port 3001)
+- Check browser console for errors (F12)
+- Try refreshing presentation tab
 
 ---
 

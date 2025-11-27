@@ -4,14 +4,20 @@ An interactive, configuration-driven presentation system for exploring technical
 
 ## Features
 
+- **🎨 Visual Configuration Editor**: Edit pages, upload images, and create hotspots using an intuitive UI - no JSON editing required!
+- **📦 Page Backup & Restore**: Backup pages before removing them, restore when needed with automatic parent handling
+- **📤 Export/Import Presentations**: Export to internal library or download as ZIP, import from library or upload ZIP files
+- **🌐 Cross-System Sharing**: Share presentations via ZIP files, transfer between installations
 - **Interactive Clickable Images**: Click on regions of technical diagrams to navigate deeper into concepts
 - **Multiple Hotspot Shapes**: Support for rectangles, circles, and polygons
-- **JSON Configuration**: Easy content management without touching code
+- **Dual Configuration Methods**: Use visual editor OR edit JSON directly
+- **Auto-Hide Navigation**: Clean full-screen presentation with mouse-activated menus
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
 - **Temenos Branding**: Professional color scheme throughout
 - **Dynamic Routing**: Automatic route generation from configuration
 - **Breadcrumb Navigation**: Clear hierarchy and easy navigation back up
-- **File-based Images**: Simply replace image files to update content
+- **Hot Module Replacement**: Instant updates during development
+- **File-based Images**: Simply replace image files or upload via UI
 
 ## Table of Contents
 
@@ -19,6 +25,7 @@ An interactive, configuration-driven presentation system for exploring technical
   - [Option 1: WSL (Linux)](#option-1-wsl-windows-subsystem-for-linux)
   - [Option 2: Native Windows](#option-2-native-windows)
 - [Quick Start](#quick-start)
+- [Visual Configuration Editor](#visual-configuration-editor) ⭐ NEW!
 - [Configuration Guide](#configuration-guide)
   - [Adding New Pages](#adding-new-pages)
   - [Defining Hotspots](#defining-hotspots)
@@ -28,6 +35,7 @@ An interactive, configuration-driven presentation system for exploring technical
 - [Development](#development)
 - [Building for Production](#building-for-production)
 - [Troubleshooting](#troubleshooting)
+- [Documentation Files](#documentation-files)
 
 ---
 
@@ -72,15 +80,28 @@ cd /home/sserniguet/technical-overview
 npm install
 ```
 
-#### Step 4: Run Development Server
+#### Step 4: Run Development Servers
 
+**Start both servers at once:**
 ```bash
-npm run dev
+npm run dev:all
+```
+
+**OR start separately:**
+```bash
+# Terminal 1
+npm run dev        # Frontend at http://localhost:5173
+
+# Terminal 2
+npm run server     # API at http://localhost:3001
 ```
 
 #### Step 5: Access from Windows Browser
 
-Open http://localhost:5173 in your Windows browser. WSL automatically forwards ports to Windows.
+- **Presentation**: http://localhost:5173
+- **Config Editor**: Click ⚙️ Config button or go to http://localhost:5173/config
+
+WSL automatically forwards ports to Windows.
 
 **Benefits of WSL:**
 - Native Linux performance
@@ -115,15 +136,26 @@ cd C:\path\to\technical-overview
 npm install
 ```
 
-#### Step 3: Run Development Server
+#### Step 3: Run Development Servers
 
+**Start both servers at once:**
 ```powershell
-npm run dev
+npm run dev:all
+```
+
+**OR start separately (two PowerShell windows):**
+```powershell
+# Window 1
+npm run dev        # Frontend at http://localhost:5173
+
+# Window 2
+npm run server     # API at http://localhost:3001
 ```
 
 #### Step 4: Access in Browser
 
-Open http://localhost:5173 in your browser
+- **Presentation**: http://localhost:5173
+- **Config Editor**: Click ⚙️ Config button or go to http://localhost:5173/config
 
 **Benefits of Native Windows:**
 - Direct file system access
@@ -135,13 +167,29 @@ Open http://localhost:5173 in your browser
 
 ## Quick Start
 
-### 1. Start the Development Server
+### 1. Start the Development Servers
 
+**Two servers are required:**
+
+**Option A: Start Both Servers at Once (Recommended)**
 ```bash
-npm run dev
+npm run dev:all
 ```
 
-The application will be available at http://localhost:5173
+**Option B: Start Separately**
+```bash
+# Terminal 1 - Frontend (Vite)
+npm run dev
+
+# Terminal 2 - Backend API (for Config Editor)
+npm run server
+```
+
+**What's Running:**
+- ✅ **Frontend**: http://localhost:5173 - Your presentation
+- ✅ **Backend API**: http://localhost:3001 - Config editor API
+
+**Note**: The frontend works standalone, but you need the API server to use the visual configuration editor.
 
 ### 2. Explore the Demo
 
@@ -151,7 +199,14 @@ Navigate through the sample pages:
 - **Data Flow** - Data pipeline visualization
 - **Shapes Demo** - Examples of all hotspot types
 
-### 3. Customize with Your Content
+### 3. Use the Visual Configuration Editor
+
+1. Move mouse to top of screen → Click **⚙️ Config** button
+2. Opens in new tab - arrange side-by-side with presentation
+3. Add/edit pages, upload images, create hotspots
+4. Click **💾 Save Configuration** → See changes instantly!
+
+**OR** Edit configuration manually:
 
 1. Add your images to `public/images/`
 2. Update `src/config/presentation.json`
@@ -159,7 +214,57 @@ Navigate through the sample pages:
 
 ---
 
+## Visual Configuration Editor
+
+**NEW!** Edit your presentation visually without touching JSON files!
+
+### Accessing the Editor
+
+1. Start both servers: `npm run dev:all`
+2. Open presentation: http://localhost:5173
+3. Move mouse to top → Click **⚙️ Config** button
+4. Editor opens in new tab
+
+### What You Can Do
+
+- ✅ **Add/Edit Pages**: Create new pages with forms
+- ✅ **Upload Images**: Drag & drop image files
+- ✅ **Select Images**: Choose from dropdown of uploaded images
+- ✅ **Create Hotspots**: Add clickable regions visually
+- ✅ **Choose Shapes**: Rectangle, Circle, or Polygon from dropdown
+- ✅ **Set Coordinates**: Use number inputs (auto-validated 0-100)
+- ✅ **Link Pages**: Select target pages from dropdown
+- ✅ **Backup Pages**: Archive pages with images before removing
+- ✅ **Restore Backups**: Bring back archived pages with automatic parent handling
+- ✅ **Export to Library**: Export selected pages to internal storage
+- ✅ **Export to External**: Download presentations as ZIP files
+- ✅ **Import from Library**: Import from internal storage
+- ✅ **Import from External**: Upload and import ZIP files from anywhere
+- ✅ **Cross-System Transfer**: Share presentations between installations
+- ✅ **Save & Preview**: Instant refresh in presentation window
+
+### Features
+
+- **User-Friendly Forms**: No JSON syntax to remember
+- **Image Preview**: See selected images before saving
+- **Dropdown Lists**: All options pre-populated
+- **Validation**: Coordinates auto-checked
+- **Live Preview**: Arrange windows side-by-side to see changes instantly
+- **Upload Support**: Add new images without file system access
+
+### Full Guide
+
+See **CONFIG_EDITOR_GUIDE.md** for complete documentation including:
+- Step-by-step tutorials
+- Coordinate system explained
+- Tips & best practices
+- Troubleshooting guide
+
+---
+
 ## Configuration Guide
+
+**Note**: You can edit configuration using the visual editor above OR manually edit the JSON file.
 
 All content is managed through a single JSON file: `src/config/presentation.json`
 
@@ -373,14 +478,17 @@ To change colors, edit `src/index.css`:
 ```
 technical-overview/
 ├── public/
-│   └── images/              # All presentation images (SVG, PNG, JPG)
+│   ├── images/              # Current presentation images (SVG, PNG, JPG)
+│   ├── backups/             # Page backups (created when backing up pages)
+│   └── exports/             # Exported presentations (created when exporting)
 ├── src/
 │   ├── components/
 │   │   ├── ImageMap/       # Clickable image component
 │   │   ├── Navigation/     # TopNav and Breadcrumbs
 │   │   └── Layout/         # Page layout wrapper
 │   ├── pages/
-│   │   └── PresentationPage.tsx
+│   │   ├── PresentationPage.tsx
+│   │   └── ConfigEditor.tsx    # Visual configuration editor
 │   ├── types/
 │   │   └── presentation.types.ts
 │   ├── utils/
@@ -392,6 +500,7 @@ technical-overview/
 │   ├── App.tsx
 │   ├── main.tsx
 │   └── index.css           # Global styles & Temenos colors
+├── server.js                # API server for config editor
 ├── package.json
 ├── tsconfig.json
 ├── vite.config.ts
@@ -405,8 +514,14 @@ technical-overview/
 ### Available Commands
 
 ```bash
-# Start development server with hot reload
+# Start both servers at once (RECOMMENDED)
+npm run dev:all
+
+# Start frontend only
 npm run dev
+
+# Start API server only (for config editor)
+npm run server
 
 # Build for production
 npm run build
@@ -415,11 +530,33 @@ npm run build
 npm run preview
 ```
 
+### Two-Server Architecture
+
+The application uses two servers during development:
+
+1. **Frontend (Vite)** - Port 5173
+   - Serves the presentation
+   - Hot Module Replacement
+   - Works standalone
+
+2. **Backend API** - Port 3001
+   - Required for visual config editor
+   - Saves configuration changes
+   - Handles image uploads
+   - Manages page backups
+   - Handles presentation export/import (library and ZIP)
+
+**Use `npm run dev:all` to start both automatically!**
+
 ### Development Workflow
 
-1. **Start dev server**: `npm run dev`
-2. **Edit content**: Modify `src/config/presentation.json`
-3. **Add images**: Place files in `public/images/`
+1. **Start both servers**: `npm run dev:all`
+2. **Edit content**:
+   - **Visual Editor**: Click ⚙️ Config button → Edit in UI
+   - **Manual**: Modify `src/config/presentation.json`
+3. **Add images**:
+   - **Upload**: Use config editor's file upload
+   - **Manual**: Place files in `public/images/`
 4. **Auto-reload**: Changes reflect immediately via HMR
 5. **Test**: Check http://localhost:5173
 
@@ -482,6 +619,23 @@ Opens the production build at http://localhost:4173
 ---
 
 ## Troubleshooting
+
+### Config Editor Shows "Loading configuration..."
+
+**Problem**: Config editor page stuck on loading screen
+
+**Solution**:
+1. **API server not running** - Most common cause
+   ```bash
+   # Start API server
+   npm run server
+
+   # OR start both servers
+   npm run dev:all
+   ```
+2. Check browser console (F12) for errors
+3. Verify API server is running: http://localhost:3001/api/config
+4. Refresh the config editor page after starting API
 
 ### Images Not Loading
 
@@ -610,6 +764,32 @@ cd /mnt/c/path/to/your/folder
 
 ---
 
+## Documentation Files
+
+This project includes comprehensive documentation:
+
+| File | Purpose | When to Read |
+|------|---------|--------------|
+| **README.md** | Main documentation (this file) | Start here for overview and reference |
+| **QUICK_START.md** | Fast 5-minute setup guide | When you want to get started immediately |
+| **CONFIG_EDITOR_GUIDE.md** | Visual editor complete guide | When using the configuration editor |
+| **CHANGELOG.md** | Recent updates and feature history | To see what's new and recently added |
+| **FEATURES_SUMMARY.md** | Complete feature list | For detailed feature documentation |
+| **CONFIGURATION_EXAMPLES.md** | JSON configuration samples | When building custom configurations manually |
+| **CUSTOMIZATION_CHECKLIST.md** | Step-by-step customization | When replacing demo with your content |
+| **PROJECT_SUMMARY.md** | Feature overview & statistics | For project overview and capabilities |
+| **DOCUMENTATION_INDEX.md** | Guide to all documentation | To find the right document quickly |
+
+**Recommended reading order:**
+1. **README.md** (this file) - Get familiar with the system
+2. **QUICK_START.md** - Get it running quickly
+3. **CONFIG_EDITOR_GUIDE.md** - Learn the visual editor
+4. **CHANGELOG.md** - See latest features (backup, export/import, ZIP files)
+5. **FEATURES_SUMMARY.md** - Complete feature documentation
+6. **CONFIGURATION_EXAMPLES.md** - See examples and patterns
+
+---
+
 ## License
 
 This project was created with Claude Code. Customize and use as needed for your organization.
@@ -617,10 +797,11 @@ This project was created with Claude Code. Customize and use as needed for your 
 ## Support
 
 For issues or questions:
-1. Check this README
-2. Review configuration examples in `src/config/presentation.json`
-3. Check browser console for errors (F12)
-4. Verify JSON syntax
+1. Check this README and other documentation files
+2. Review **CONFIG_EDITOR_GUIDE.md** for config editor issues
+3. Review **QUICK_START.md** for common problems
+4. Check browser console for errors (F12)
+5. Verify both servers are running (`npm run dev:all`)
 
 ---
 
@@ -633,4 +814,8 @@ For issues or questions:
 
 ---
 
-**Ready to customize?** Start by editing `src/config/presentation.json` and adding your images to `public/images/`!
+**Ready to customize?**
+- **Visual Editor**: Run `npm run dev:all` → Click ⚙️ Config → Edit visually!
+- **Manual**: Edit `src/config/presentation.json` and add images to `public/images/`
+
+**Both servers running?** → **http://localhost:5173** 🚀

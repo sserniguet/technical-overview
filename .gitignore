@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Runtime generated directories
+public/backups/
+public/exports/
+temp/
+
+# Zone identifier files
+*.Identifier

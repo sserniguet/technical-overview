@@ -1,0 +1,226 @@
+{
+  "pages": [
+    {
+      "id": "home",
+      "path": "/",
+      "title": "System Overview",
+      "description": "High-level overview of the technical architecture",
+      "image": "/images/overview.svg",
+      "showInNav": true,
+      "hotspots": [
+        {
+          "id": "architecture",
+          "shape": "rect",
+          "coords": {
+            "x": 10,
+            "y": 30,
+            "width": 35,
+            "height": 40
+          },
+          "targetPage": "/architecture",
+          "label": "System Architecture",
+          "description": "Click to explore the system architecture in detail"
+        },
+        {
+          "id": "data-flow",
+          "shape": "rect",
+          "coords": {
+            "x": 55,
+            "y": 30,
+            "width": 35,
+            "height": 40
+          },
+          "targetPage": "/data-flow",
+          "label": "Data Flow",
+          "description": "Click to understand how data flows through the system"
+        }
+      ]
+    },
+	{
+      "id": "TechnologyPrinciple",
+      "path": "/TechnologyPrinciple",
+      "title": "Temenos provides you key technology principles",
+      "description": "Technology Enable Business Benefits",
+      "image": "/images/TechnologyPrinciple.png",
+      "showInNav": true,
+      "hotspots": [
+        {
+          "id": "OperatingModel",
+          "shape": "rect",
+          "coords": {
+            "x": 40,
+            "y": 0,
+            "width": 55,
+            "height": 17
+          },
+          "targetPage": "/OperatingModel",
+          "label": "System Architecture",
+          "description": "Click to explore the system architecture in detail"
+        }
+      ]
+    },
+	{
+      "id": "OperatingModel",
+      "path": "/OperatingModel",
+      "title": "Operating Model",
+      "description": "Operating Model",
+      "image": "/images/OperatingModel.png",
+	  "parent": "TechnologyPrinciple",
+      "showInNav": true,
+      "hotspots": [
+        {
+          "id": "SaaS",
+          "shape": "rect",
+          "coords": {
+            "x": 12,
+            "y": 0,
+            "width": 25,
+            "height": 90
+          },
+          "targetPage": "/SaaS",
+          "label": "System Architecture",
+          "description": "Click to explore the system architecture in detail"
+        }
+      ]
+    },
+    {
+      "id": "SaaS",
+      "path": "/SaaS",
+      "title": "SaaS",
+      "description": "SaaS",
+      "image": "/images/SaaS.png",
+      "parent": "OperatingModel",
+      "showInNav": true,
+	   "hotspots": [
+      ]
+    },
+    {
+      "id": "data-flow",
+      "path": "/data-flow",
+      "title": "Data Flow",
+      "description": "How data moves through the system",
+      "image": "/images/data-flow.svg",
+      "parent": "home",
+      "showInNav": true,
+      "hotspots": [
+        {
+          "id": "ingestion",
+          "shape": "rect",
+          "coords": {
+            "x": 10,
+            "y": 20,
+            "width": 25,
+            "height": 60
+          },
+          "targetPage": "/data-flow/ingestion",
+          "label": "Data Ingestion",
+          "description": "How data enters the system"
+        },
+        {
+          "id": "processing",
+          "shape": "rect",
+          "coords": {
+            "x": 40,
+            "y": 20,
+            "width": 25,
+            "height": 60
+          },
+          "targetPage": "/data-flow/processing",
+          "label": "Data Processing",
+          "description": "Data transformation and processing pipeline"
+        },
+        {
+          "id": "storage",
+          "shape": "rect",
+          "coords": {
+            "x": 70,
+            "y": 20,
+            "width": 25,
+            "height": 60
+          },
+          "targetPage": "/data-flow/storage",
+          "label": "Data Storage",
+          "description": "How and where data is stored"
+        }
+      ]
+    },
+    {
+      "id": "shapes-demo",
+      "path": "/shapes-demo",
+      "title": "Shapes Demo",
+      "description": "Demonstration of all hotspot shape types: rectangles, circles, and polygons",
+      "image": "/images/shapes-demo.svg",
+      "showInNav": true,
+      "hotspots": [
+        {
+          "id": "rect-demo",
+          "shape": "rect",
+          "coords": {
+            "x": 8.3,
+            "y": 22.5,
+            "width": 25,
+            "height": 31.25
+          },
+          "targetPage": "/",
+          "label": "Rectangle Hotspot",
+          "description": "Example of a rectangular hotspot region"
+        },
+        {
+          "id": "circle-demo",
+          "shape": "circle",
+          "coords": {
+            "cx": 50,
+            "cy": 38.125,
+            "r": 10.4
+          },
+          "targetPage": "/",
+          "label": "Circle Hotspot",
+          "description": "Example of a circular hotspot region"
+        },
+        {
+          "id": "polygon-demo",
+          "shape": "polygon",
+          "coords": {
+            "points": "79.2,22.5 87.5,38.125 79.2,53.75 70.8,38.125"
+          },
+          "targetPage": "/",
+          "label": "Polygon Hotspot",
+          "description": "Example of a custom polygon hotspot (diamond shape)"
+        },
+        {
+          "id": "combined-demo",
+          "shape": "rect",
+          "coords": {
+            "x": 16.7,
+            "y": 62.5,
+            "width": 66.7,
+            "height": 25
+          },
+          "targetPage": "/",
+          "label": "Combined Hotspots Area",
+          "description": "Multiple hotspot shapes can coexist on the same image"
+        }
+      ]
+    },
+    {
+      "id": "backend",
+      "path": "/architecture/backend",
+      "title": "Backend Services",
+      "description": "Microservices architecture and API layer",
+      "image": "/images/backend.svg",
+      "parent": "architecture",
+      "showInNav": false,
+      "hotspots": []
+    },
+    {
+      "id": "frontend",
+      "path": "/architecture/frontend",
+      "title": "Frontend Application",
+      "description": "React-based single page application",
+      "image": "/images/frontend.svg",
+      "parent": "architecture",
+      "showInNav": false,
+      "hotspots": []
+    }
+  ]
+}

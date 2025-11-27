@@ -4,6 +4,19 @@ import './ConfigEditor.css';
 
 const API_BASE = 'http://localhost:3001/api';
 
+interface Backup {
+  name: string;
+  config: PageConfig;
+  createdAt: string;
+}
+
+interface ExportedPresentation {
+  name: string;
+  pageCount: number;
+  title: string;
+  createdAt: string;
+}
+
 export function ConfigEditor() {
   const [config, setConfig] = useState<PresentationConfig | null>(null);
   const [selectedPageIndex, setSelectedPageIndex] = useState<number | null>(null);
@@ -11,6 +24,16 @@ export function ConfigEditor() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const zipInputRef = useRef<HTMLInputElement>(null);
+  const [backups, setBackups] = useState<Backup[]>([]);
+  const [showBackupsModal, setShowBackupsModal] = useState(false);
+  const [selectedBackup, setSelectedBackup] = useState<string | null>(null);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [selectedPageIds, setSelectedPageIds] = useState<Set<string>>(new Set());
+  const [exportName, setExportName] = useState('');
+  const [exportedPresentations, setExportedPresentations] = useState<ExportedPresentation[]>([]);
+  const [selectedImport, setSelectedImport] = useState<string | null>(null);
 
   useEffect(() => {
     loadConfig();
@@ -124,18 +147,302 @@ export function ConfigEditor() {
     event.target.value = '';
   };
 
-  const deletePage = (index: number) => {
+  const backupPage = async (index: number) => {
     if (!config) return;
-    if (!confirm('Are you sure you want to delete this page?')) return;
 
-    const newPages = config.pages.filter((_, i) => i !== index);
-    setConfig({ ...config, pages: newPages });
+    const page = config.pages[index];
+    const backupName = prompt('Enter a name for this backup:', page.id);
 
-    if (selectedPageIndex === index) {
-      setSelectedPageIndex(null);
-    } else if (selectedPageIndex !== null && selectedPageIndex > index) {
-      setSelectedPageIndex(selectedPageIndex - 1);
+    if (!backupName) return;
+
+    try {
+      const response = await fetch(`${API_BASE}/backup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pageConfig: page,
+          backupName: backupName
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        showMessage('success', `Page backed up as: ${data.backupName}`);
+
+        // Remove the page from config after successful backup
+        const newPages = config.pages.filter((_, i) => i !== index);
+        setConfig({ ...config, pages: newPages });
+
+        if (selectedPageIndex === index) {
+          setSelectedPageIndex(null);
+        } else if (selectedPageIndex !== null && selectedPageIndex > index) {
+          setSelectedPageIndex(selectedPageIndex - 1);
+        }
+      } else {
+        showMessage('error', 'Failed to backup page');
+      }
+    } catch (error) {
+      showMessage('error', 'Failed to backup page');
     }
+  };
+
+  const loadBackups = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/backups`);
+      const data = await response.json();
+      setBackups(data);
+    } catch (error) {
+      showMessage('error', 'Failed to load backups');
+    }
+  };
+
+  const restoreBackup = async (backupName: string) => {
+    if (!config) return;
+
+    try {
+      // Get the backup config to check if parent exists
+      const backup = backups.find(b => b.name === backupName);
+      if (!backup) return;
+
+      // Check if the parent page still exists in the current config
+      const parentExists = backup.config.parent
+        ? config.pages.some(p => p.id === backup.config.parent)
+        : true;
+
+      const response = await fetch(`${API_BASE}/restore-backup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          backupName: backupName,
+          parentExists: parentExists
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const restoredPage = data.pageConfig;
+
+        // Add the restored page to the config
+        setConfig({
+          ...config,
+          pages: [...config.pages, restoredPage]
+        });
+
+        showMessage('success', 'Backup restored successfully');
+        setShowBackupsModal(false);
+        setSelectedBackup(null);
+      } else {
+        showMessage('error', 'Failed to restore backup');
+      }
+    } catch (error) {
+      showMessage('error', 'Failed to restore backup');
+    }
+  };
+
+  const deleteBackup = async (backupName: string) => {
+    if (!confirm(`Are you sure you want to permanently delete the backup "${backupName}"?`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/backup/${encodeURIComponent(backupName)}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        showMessage('success', 'Backup deleted successfully');
+        loadBackups(); // Refresh the list
+        setSelectedBackup(null);
+      } else {
+        showMessage('error', 'Failed to delete backup');
+      }
+    } catch (error) {
+      showMessage('error', 'Failed to delete backup');
+    }
+  };
+
+  const loadExportedPresentations = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/exported-presentations`);
+      const data = await response.json();
+      setExportedPresentations(data);
+    } catch (error) {
+      showMessage('error', 'Failed to load exported presentations');
+    }
+  };
+
+  const togglePageSelection = (pageId: string) => {
+    const newSelection = new Set(selectedPageIds);
+
+    if (newSelection.has(pageId)) {
+      // Deselect this page and all its children
+      const removePageAndChildren = (id: string) => {
+        newSelection.delete(id);
+        const children = config?.pages.filter(p => p.parent === id) || [];
+        children.forEach(child => removePageAndChildren(child.id));
+      };
+      removePageAndChildren(pageId);
+    } else {
+      // Select this page and all its children
+      const addPageAndChildren = (id: string) => {
+        newSelection.add(id);
+        const children = config?.pages.filter(p => p.parent === id) || [];
+        children.forEach(child => addPageAndChildren(child.id));
+      };
+      addPageAndChildren(pageId);
+    }
+
+    setSelectedPageIds(newSelection);
+  };
+
+  const exportPresentation = async (deleteAfter: boolean) => {
+    if (!exportName.trim()) {
+      showMessage('error', 'Presentation name is required');
+      return;
+    }
+
+    if (selectedPageIds.size === 0) {
+      showMessage('error', 'Please select at least one page to export');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/export-presentation`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pageIds: Array.from(selectedPageIds),
+          presentationName: exportName,
+          deleteAfterExport: deleteAfter
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        showMessage('success', data.message);
+        setShowExportModal(false);
+        setExportName('');
+        setSelectedPageIds(new Set());
+
+        // Reload config if pages were deleted
+        if (deleteAfter) {
+          await loadConfig();
+        }
+      } else {
+        const error = await response.json();
+        showMessage('error', error.error || 'Failed to export presentation');
+      }
+    } catch (error) {
+      showMessage('error', 'Failed to export presentation');
+    }
+  };
+
+  const exportToDownload = async () => {
+    if (!exportName.trim()) {
+      showMessage('error', 'Presentation name is required');
+      return;
+    }
+
+    if (selectedPageIds.size === 0) {
+      showMessage('error', 'Please select at least one page to export');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/export-presentation-zip`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pageIds: Array.from(selectedPageIds),
+          presentationName: exportName
+        })
+      });
+
+      if (response.ok) {
+        // Download the ZIP file
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${exportName}.zip`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        showMessage('success', `Presentation downloaded as ${exportName}.zip`);
+        setShowExportModal(false);
+        setExportName('');
+        setSelectedPageIds(new Set());
+      } else {
+        const error = await response.json();
+        showMessage('error', error.error || 'Failed to export presentation');
+      }
+    } catch (error) {
+      showMessage('error', 'Failed to export presentation');
+    }
+  };
+
+  const importPresentation = async () => {
+    if (!selectedImport) {
+      showMessage('error', 'Please select a presentation to import');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/import-presentation`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          presentationName: selectedImport
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        showMessage('success', `${data.message} - ${data.importedPages} pages imported`);
+        setShowImportModal(false);
+        setSelectedImport(null);
+        await loadConfig();
+        await loadImages();
+      } else {
+        const error = await response.json();
+        showMessage('error', error.error || 'Failed to import presentation');
+      }
+    } catch (error) {
+      showMessage('error', 'Failed to import presentation');
+    }
+  };
+
+  const handleZipImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('zipFile', file);
+
+    try {
+      const response = await fetch(`${API_BASE}/import-presentation-zip`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        showMessage('success', `${data.message} - ${data.importedPages} pages imported`);
+        setShowImportModal(false);
+        await loadConfig();
+        await loadImages();
+      } else {
+        const error = await response.json();
+        showMessage('error', error.error || 'Failed to import ZIP file');
+      }
+    } catch (error) {
+      showMessage('error', 'Failed to import ZIP file');
+    }
+
+    // Reset file input
+    event.target.value = '';
   };
 
   const updatePage = (index: number, updates: Partial<PageConfig>) => {
@@ -227,11 +534,57 @@ export function ConfigEditor() {
     return <div className="config-editor-loading">Loading configuration...</div>;
   }
 
+  // Helper function to calculate the depth of a page based on its parent hierarchy
+  const getPageDepth = (pageId: string, depth = 0): number => {
+    if (depth > 10) return 0; // Prevent infinite loops
+    const page = config.pages.find(p => p.id === pageId);
+    if (!page || !page.parent) return depth;
+    return getPageDepth(page.parent, depth + 1);
+  };
+
+  // Helper function to organize pages hierarchically
+  const organizePages = () => {
+    const result: Array<{ page: PageConfig; index: number; depth: number }> = [];
+    const addedIds = new Set<string>();
+
+    const addPageWithChildren = (pageId: string | null, currentDepth = 0) => {
+      // Find all pages with this parent (or no parent if pageId is null)
+      const children = config.pages
+        .map((page, index) => ({ page, index }))
+        .filter(({ page }) => {
+          const parent = page.parent || null;
+          return parent === pageId && !addedIds.has(page.id);
+        });
+
+      children.forEach(({ page, index }) => {
+        addedIds.add(page.id);
+        result.push({ page, index, depth: currentDepth });
+        // Recursively add children
+        addPageWithChildren(page.id, currentDepth + 1);
+      });
+    };
+
+    // Start with root pages (pages with no parent)
+    addPageWithChildren(null, 0);
+
+    // Add any orphaned pages at the end (pages whose parent doesn't exist)
+    config.pages.forEach((page, index) => {
+      if (!addedIds.has(page.id)) {
+        const depth = getPageDepth(page.id);
+        result.push({ page, index, depth });
+        addedIds.add(page.id);
+      }
+    });
+
+    return result;
+  };
+
+  const organizedPages = organizePages();
   const selectedPage = selectedPageIndex !== null ? config.pages[selectedPageIndex] : null;
 
   return (
     <div className="config-editor">
-      {/* Hidden file input for adding pages with images */}
+      {/* Hidden file inputs */}
       <input
         ref={fileInputRef}
         type="file"
@@ -239,15 +592,51 @@ export function ConfigEditor() {
         style={{ display: 'none' }}
         onChange={handleAddPageImage}
       />
+      <input
+        ref={zipInputRef}
+        type="file"
+        accept=".zip,application/zip"
+        style={{ display: 'none' }}
+        onChange={handleZipImport}
+      />
 
       <header className="config-editor-header">
         <h1>Configuration Editor</h1>
         <div className="config-editor-actions">
+          <button
+            className="btn-export"
+            onClick={() => {
+              setSelectedPageIds(new Set());
+              setExportName('');
+              setShowExportModal(true);
+            }}
+          >
+            📤 Export
+          </button>
+          <button
+            className="btn-import"
+            onClick={() => {
+              loadExportedPresentations();
+              setSelectedImport(null);
+              setShowImportModal(true);
+            }}
+          >
+            📥 Import
+          </button>
+          <button
+            className="btn-backup-list"
+            onClick={() => {
+              loadBackups();
+              setShowBackupsModal(true);
+            }}
+          >
+            📦 Backups
+          </button>
           <button className="btn-save" onClick={saveConfig} disabled={saving}>
-            {saving ? 'Saving...' : '💾 Save Configuration'}
+            {saving ? 'Saving...' : '💾 Save'}
           </button>
           <a href="/" target="_blank" className="btn-preview">
-            🔍 Open Presentation
+            🔍 Preview
           </a>
         </div>
       </header>
@@ -266,24 +655,27 @@ export function ConfigEditor() {
               <button className="btn-add" onClick={addPage}>+ Add Page</button>
             </div>
             <ul className="pages-list">
-              {config.pages.map((page, index) => (
+              {organizedPages.map(({ page, index, depth }) => (
                 <li
                   key={page.id}
                   className={`page-item ${selectedPageIndex === index ? 'active' : ''}`}
+                  style={{ paddingLeft: `${1 + depth * 1.5}rem` }}
                   onClick={() => setSelectedPageIndex(index)}
                 >
                   <div className="page-item-content">
+                    {depth > 0 && <span className="hierarchy-indicator">└─</span>}
                     <strong>{page.title}</strong>
                     <small>{page.path}</small>
                   </div>
                   <button
-                    className="btn-delete-small"
+                    className="btn-backup-small"
                     onClick={(e) => {
                       e.stopPropagation();
-                      deletePage(index);
+                      backupPage(index);
                     }}
+                    title="Backup this page"
                   >
-                    ×
+                    📦
                   </button>
                 </li>
               ))}
@@ -600,6 +992,219 @@ export function ConfigEditor() {
           )}
         </main>
       </div>
+
+      {showBackupsModal && (
+        <div className="modal-overlay" onClick={() => setShowBackupsModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Backups</h2>
+              <button className="btn-close" onClick={() => setShowBackupsModal(false)}>
+                ×
+              </button>
+            </div>
+
+            <div className="modal-body">
+              {backups.length === 0 ? (
+                <p className="no-backups">No backups found</p>
+              ) : (
+                <div className="backups-list">
+                  {backups.map((backup) => (
+                    <div
+                      key={backup.name}
+                      className={`backup-item ${selectedBackup === backup.name ? 'selected' : ''}`}
+                      onClick={() => setSelectedBackup(backup.name)}
+                    >
+                      <div className="backup-info">
+                        <strong>{backup.name}</strong>
+                        {backup.config && (
+                          <div className="backup-details">
+                            <small>Page: {backup.config.title}</small>
+                            <small>Path: {backup.config.path}</small>
+                            {backup.config.parent && (
+                              <small>Parent: {backup.config.parent}</small>
+                            )}
+                            <small>Created: {new Date(backup.createdAt).toLocaleString()}</small>
+                          </div>
+                        )}
+                      </div>
+                      <div className="backup-actions">
+                        <button
+                          className="btn-restore"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            restoreBackup(backup.name);
+                          }}
+                        >
+                          ↩️ Restore
+                        </button>
+                        <button
+                          className="btn-delete"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteBackup(backup.name);
+                          }}
+                        >
+                          🗑️ Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showExportModal && (
+        <div className="modal-overlay" onClick={() => setShowExportModal(false)}>
+          <div className="modal-content modal-large" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Export Presentation</h2>
+              <button className="btn-close" onClick={() => setShowExportModal(false)}>
+                ×
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Presentation Name *</label>
+                <input
+                  type="text"
+                  value={exportName}
+                  onChange={(e) => setExportName(e.target.value)}
+                  placeholder="Enter presentation name..."
+                  className="export-name-input"
+                />
+                <small>This name will be used for the export folder</small>
+              </div>
+
+              <div className="form-group">
+                <label>Select Pages to Export ({selectedPageIds.size} selected)</label>
+                <div className="export-pages-list">
+                  {organizePages().map(({ page, index, depth }) => (
+                    <div
+                      key={page.id}
+                      className="export-page-item"
+                      style={{ paddingLeft: `${1 + depth * 1.5}rem` }}
+                    >
+                      <label className="checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={selectedPageIds.has(page.id)}
+                          onChange={() => togglePageSelection(page.id)}
+                        />
+                        {depth > 0 && <span className="hierarchy-indicator">└─</span>}
+                        <span className="page-title">{page.title}</span>
+                        <span className="page-path">{page.path}</span>
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <div className="export-buttons-group">
+                  <h4>Export to Library:</h4>
+                  <div className="button-row">
+                    <button
+                      className="btn-export-action"
+                      onClick={() => exportPresentation(false)}
+                      disabled={!exportName.trim() || selectedPageIds.size === 0}
+                    >
+                      📤 To Library
+                    </button>
+                    <button
+                      className="btn-export-delete"
+                      onClick={() => exportPresentation(true)}
+                      disabled={!exportName.trim() || selectedPageIds.size === 0}
+                    >
+                      📤 To Library & Delete
+                    </button>
+                  </div>
+                </div>
+                <div className="export-buttons-group">
+                  <h4>Export to External:</h4>
+                  <div className="button-row">
+                    <button
+                      className="btn-download"
+                      onClick={exportToDownload}
+                      disabled={!exportName.trim() || selectedPageIds.size === 0}
+                    >
+                      💾 Download ZIP
+                    </button>
+                  </div>
+                  <small>Downloads a ZIP file you can save anywhere on your computer</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showImportModal && (
+        <div className="modal-overlay" onClick={() => setShowImportModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Import Presentation</h2>
+              <button className="btn-close" onClick={() => setShowImportModal(false)}>
+                ×
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <div className="import-section">
+                <h3>Import from Library</h3>
+                {exportedPresentations.length === 0 ? (
+                  <p className="no-backups">No exported presentations found in library</p>
+                ) : (
+                  <>
+                    <div className="import-list">
+                      {exportedPresentations.map((presentation) => (
+                        <div
+                          key={presentation.name}
+                          className={`import-item ${selectedImport === presentation.name ? 'selected' : ''}`}
+                          onClick={() => setSelectedImport(presentation.name)}
+                        >
+                          <div className="import-info">
+                            <strong>{presentation.name}</strong>
+                            <div className="import-details">
+                              <small>Pages: {presentation.pageCount}</small>
+                              <small>Created: {new Date(presentation.createdAt).toLocaleString()}</small>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      className="btn-import-action"
+                      onClick={importPresentation}
+                      disabled={!selectedImport}
+                    >
+                      📥 Import from Library
+                    </button>
+                  </>
+                )}
+              </div>
+
+              <div className="import-divider">OR</div>
+
+              <div className="import-section">
+                <h3>Import from External File</h3>
+                <p className="import-description">
+                  Upload a ZIP file containing a presentation exported from this or another system
+                </p>
+                <button
+                  className="btn-import-file"
+                  onClick={() => zipInputRef.current?.click()}
+                >
+                  📁 Choose ZIP File
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { PageConfig } from '../types/presentation.types';
 import { useConfig } from '../context/ConfigContext';
 import { getBreadcrumbs } from '../utils/configLoader';
 import { ImageMap } from '../components/ImageMap/ImageMap';
-import { Breadcrumbs } from '../components/Navigation/Breadcrumbs';
+import { NavigationBar } from '../components/Navigation/NavigationBar';
 import './PresentationPage.css';
 
 interface PresentationPageProps {
@@ -19,7 +19,7 @@ export function PresentationPage({ page }: PresentationPageProps) {
 
   return (
     <div className="presentation-page">
-      <Breadcrumbs breadcrumbs={breadcrumbs} />
+      <NavigationBar pages={config.pages} breadcrumbs={breadcrumbs} />
 
       <div className="presentation-page-header">
         <h1 className="presentation-page-title">{page.title}</h1>
@@ -35,12 +35,6 @@ export function PresentationPage({ page }: PresentationPageProps) {
           hotspots={page.hotspots}
         />
       </div>
-
-      {page.hotspots.length > 0 && (
-        <div className="presentation-page-hint">
-          <p>💡 Hover over the image to discover clickable regions</p>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import { useConfig } from '../../context/ConfigContext';
-import { TopNav } from '../Navigation/TopNav';
+import { NavigationProvider } from '../../context/NavigationContext';
 import './Layout.css';
 
 interface LayoutProps {
@@ -8,29 +7,17 @@ interface LayoutProps {
 }
 
 /**
- * Main layout wrapper with header, navigation, and footer
+ * Main layout wrapper with auto-hiding navigation
+ * Navigation shows when mouse is at the top of the page
  */
 export function Layout({ children }: LayoutProps) {
-  const { config } = useConfig();
-
   return (
-    <div className="layout">
-      <header className="layout-header">
-        <div className="layout-header-content">
-          <h1 className="layout-title">Technical Overview</h1>
-          <p className="layout-subtitle">Interactive Technical Presentation</p>
-        </div>
-      </header>
-
-      <TopNav pages={config.pages} />
-
-      <main className="layout-main">
-        {children}
-      </main>
-
-      <footer className="layout-footer">
-        <p>&copy; 2024 Technical Overview. Built with Vite + React</p>
-      </footer>
-    </div>
+    <NavigationProvider>
+      <div className="layout">
+        <main className="layout-main">
+          {children}
+        </main>
+      </div>
+    </NavigationProvider>
   );
 }
