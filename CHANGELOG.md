@@ -1,6 +1,163 @@
 # Changelog
 
-## Latest Updates - Session 3 (2025-11-27)
+## Latest Updates - Session 4 (2025-11-28)
+
+### ✨ Visual Hotspot Editor (Phases 5-7)
+
+**Complete visual drawing system for creating and editing hotspots directly on images!**
+
+#### Visual Editor Features
+
+**Draw Mode - Create Hotspots by Drawing:**
+- **Rectangle Drawing**: Click and drag to create rectangular hotspots
+- **Circle Drawing**: Click center point, then drag to set radius
+- **Polygon Drawing**: Click to add points, double-click to finish shape
+- Real-time preview while drawing
+- Automatic coordinate conversion (pixel to percentage)
+- Smart validation (minimum sizes, bounds checking)
+
+**Edit Mode - Modify Existing Hotspots:**
+- **Select**: Click any hotspot to select it
+- **Move**: Drag selected hotspot to new position
+- **Resize Rectangles**: Drag handles to resize (all 8 directions)
+- **Resize Circles**: Drag radius handle to adjust size
+- **Edit Polygon Points**: Drag individual polygon vertices
+- **Delete**: Press DELETE or BACKSPACE key
+- **Duplicate**: Press CTRL+D (CMD+D on Mac)
+
+**View Mode - Preview Only:**
+- See all hotspots without editing
+- Safe viewing mode
+
+**User Interface:**
+- Fullscreen editor with dark theme
+- Interactive toolbar with mode switching
+- Shape selector (Rectangle, Circle, Polygon)
+- Real-time hints and instructions
+- Keyboard shortcuts displayed
+- Save/Cancel buttons
+- Visual feedback (selections, highlights, previews)
+
+#### Technical Implementation
+
+**Phase 5 - Core Drawing System:**
+
+Created comprehensive drawing infrastructure:
+
+```
+src/utils/coordinateUtils.ts
+```
+- `pixelToPercentage()` - Convert mouse coords to percentage (0-100)
+- `percentageToPixel()` - Reverse conversion for rendering
+- `getMousePosition()` - Helper for mouse event handling
+- `distance()` - Calculate distance between points
+- `roundCoords()` - Round coordinates to decimal places
+- `parsePolygonPoints()` / `stringifyPolygonPoints()` - Polygon data handling
+- `getPolygonCentroid()` - Calculate polygon center for labels
+
+```
+src/components/VisualEditor/EditorToolbar.tsx + .css
+```
+- Mode switcher (Draw/Edit/View) with visual feedback
+- Shape selector with emoji icons
+- Contextual hints based on active tool
+- Save/Cancel actions
+- Responsive design
+
+```
+src/components/VisualEditor/DrawingCanvas.tsx + .css
+```
+- SVG overlay system (viewBox="0 0 100 100")
+- Mouse event handlers (down, move, up, double-click)
+- Drawing state management
+- Preview rendering for active drawing
+- Hotspot rendering with selection states
+- Polygon point tracking and preview lines
+- Auto-sizing to image dimensions
+
+**Phase 6 - Edit Functionality:**
+
+```
+src/components/VisualEditor/HotspotEditor.tsx + .css
+```
+- Main editor component orchestrating all features
+- Edit state management (dragging, resizing, point editing)
+- Keyboard shortcut handlers (DELETE, CTRL+D)
+- Move hotspot implementation
+- Resize rectangle with 8-direction handles
+- Resize circle with radius handle
+- Edit polygon vertices individually
+- Delete and duplicate operations
+- Smart coordinate bounds checking
+- Offset duplication (prevents exact overlaps)
+
+**Phase 7 - Integration:**
+
+```
+src/pages/ConfigEditor.tsx (modified)
+```
+- Added "✏️ Visual Editor" button in Hotspots section
+- Button group layout (Visual Editor + Add Hotspot)
+- Modal state management
+- Fullscreen modal integration
+- Auto-save on hotspot changes
+- Pass current page image and hotspots to editor
+
+```
+src/pages/ConfigEditor.css (modified)
+```
+- `.modal-overlay-fullscreen` - Fullscreen black background
+- `.btn-visual-editor` - Gradient button with hover effects
+- `.button-group` - Flex layout for multiple buttons
+- Responsive styles
+
+#### New Components Created
+
+```
+src/components/VisualEditor/
+├── HotspotEditor.tsx          - Main editor component (state management)
+├── HotspotEditor.css          - Editor styles
+├── EditorToolbar.tsx          - Toolbar with mode/shape/actions
+├── EditorToolbar.css          - Toolbar styles
+├── DrawingCanvas.tsx          - SVG canvas with drawing logic
+└── DrawingCanvas.css          - Canvas styles
+
+src/utils/
+└── coordinateUtils.ts         - Coordinate conversion utilities
+```
+
+#### Key Features
+
+- **Zero Manual Coordinate Entry**: Draw everything visually
+- **Responsive by Design**: Percentage-based coordinates scale perfectly
+- **Intuitive Controls**: Familiar drawing tools (like image editors)
+- **Keyboard Shortcuts**: Power user efficiency
+- **Real-time Feedback**: See exactly what you're creating
+- **Non-destructive**: Cancel button discards changes
+- **Auto-save**: Save button immediately persists to config
+
+#### User Experience Improvements
+
+- No more guessing coordinates!
+- See hotspots while drawing
+- Visual selection with gold highlights
+- Contextual instructions in toolbar
+- Error prevention (bounds checking, minimum sizes)
+- Smooth animations and transitions
+- Dark theme reduces eye strain
+
+#### Statistics - Session 4
+
+- **New Components**: 3 (HotspotEditor, EditorToolbar, DrawingCanvas)
+- **New Utilities**: 1 file with 8+ helper functions
+- **New CSS Files**: 3
+- **Code Added**: ~1,200 lines
+- **Files Modified**: 3 (ConfigEditor.tsx, ConfigEditor.css, FEATURES_SUMMARY.md)
+- **Integration Points**: 1 (Visual Editor button in ConfigEditor)
+
+---
+
+## Previous Updates - Session 3 (2025-11-27)
 
 ### 🎯 Enhanced Hotspot System with Multiple Action Types
 

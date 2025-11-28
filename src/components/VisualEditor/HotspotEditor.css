@@ -1,0 +1,37 @@
+.hotspot-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #0a0a0a;
+  color: white;
+}
+
+.editor-content {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+}
+
+.editor-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-top: 1px solid var(--temenos-energy-violet);
+  font-size: 13px;
+}
+
+.editor-shortcuts {
+  color: #64b5f6;
+  font-size: 12px;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .editor-info {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+  }
+}

@@ -249,7 +249,75 @@
       "description": "Page for AzureDeployment",
       "image": "/images/AzureDeployment.png",
       "showInNav": false,
-      "hotspots": [],
+      "hotspots": [
+        {
+          "id": "hotspot-1764322844957-ksxj6hi6i",
+          "shape": "rect",
+          "coords": {
+            "x": 61.68,
+            "y": 41.46,
+            "width": 14.759999999999998,
+            "height": 11.490000000000002
+          },
+          "actionType": "text-popup",
+          "label": "User Interface",
+          "content": {
+            "text": "This the user interface"
+          }
+        },
+        {
+          "id": "hotspot-1764322862977-lahpdze9e",
+          "shape": "rect",
+          "coords": {
+            "x": 61.36,
+            "y": 54.41,
+            "width": 14.810000000000002,
+            "height": 11.88000000000001
+          },
+          "actionType": "navigation",
+          "label": "New rect hotspot",
+          "content": {}
+        },
+        {
+          "id": "hotspot-1764322867164-0lnyo47k8",
+          "shape": "rect",
+          "coords": {
+            "x": 61.52,
+            "y": 69.27,
+            "width": 14.809999999999995,
+            "height": 11.200000000000003
+          },
+          "actionType": "navigation",
+          "label": "New rect hotspot",
+          "content": {}
+        },
+        {
+          "id": "hotspot-1764322871028-w9wjhawnh",
+          "shape": "rect",
+          "coords": {
+            "x": 61.47,
+            "y": 82.9,
+            "width": 14.86,
+            "height": 11.58999999999999
+          },
+          "actionType": "navigation",
+          "label": "New rect hotspot",
+          "content": {}
+        },
+        {
+          "id": "hotspot-1764322877307-3k9kvu7hg",
+          "shape": "rect",
+          "coords": {
+            "x": 81.37,
+            "y": 68.69,
+            "width": 7.589999999999989,
+            "height": 19.47
+          },
+          "actionType": "navigation",
+          "label": "New rect hotspot",
+          "content": {}
+        }
+      ],
       "parent": "OperatingModel"
     },
     {

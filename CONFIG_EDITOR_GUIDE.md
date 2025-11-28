@@ -47,11 +47,13 @@ npm run server
 - ✅ Restore backed up pages
 
 **Hotspot Management:**
+- ✅ **Visual Editor**: Draw hotspots directly on images! ⭐ NEW!
 - ✅ Add hotspots to any page
 - ✅ Choose shape type (Rectangle, Circle, Polygon)
-- ✅ Set coordinates with easy-to-use forms
-- ✅ Link hotspots to pages
-- ✅ Delete hotspots
+- ✅ Set coordinates visually OR with forms
+- ✅ Configure 7 action types (navigation, popups, tooltips, videos, iframes)
+- ✅ Move and resize hotspots visually
+- ✅ Delete and duplicate hotspots
 
 **Image Management:**
 - ✅ Upload new images
@@ -92,6 +94,62 @@ npm run server
 5. Click **"💾 Save Configuration"**
 
 ### Adding Hotspots
+
+You can add hotspots in two ways:
+1. **Visual Editor** (Recommended) - Draw hotspots directly on images ⭐ NEW!
+2. **Manual Entry** - Use forms to enter coordinates
+
+#### Option 1: Visual Editor (Recommended) ⭐ NEW!
+
+The easiest way to create hotspots!
+
+1. Select a page from the sidebar
+2. Scroll to the "Hotspots" section
+3. Click **"✏️ Visual Editor"** button
+4. The fullscreen Visual Editor opens
+
+**Draw Mode** - Create new hotspots:
+- Select a shape from the toolbar (Rectangle, Circle, or Polygon)
+- **Rectangle**: Click and drag on the image to draw
+- **Circle**: Click the center, then drag to set radius
+- **Polygon**: Click to add points, double-click to finish
+- Real-time preview shows as you draw
+- Coordinates automatically calculated as percentages
+
+**Edit Mode** - Modify existing hotspots:
+- Click any hotspot to select it (turns gold)
+- **Move**: Drag the hotspot to reposition
+- **Resize Rectangle**: Drag corner or edge handles
+- **Resize Circle**: Drag the radius handle outward/inward
+- **Edit Polygon**: Drag individual vertex points
+- **Delete**: Press DELETE or BACKSPACE key
+- **Duplicate**: Press CTRL+D (CMD+D on Mac) to create a copy
+
+**View Mode** - Preview only:
+- See all hotspots without accidentally editing them
+
+**Toolbar Features:**
+- Mode switcher (Draw/Edit/View)
+- Shape selector (Rectangle/Circle/Polygon)
+- Contextual hints based on active tool
+- **Save** button: Applies changes and returns to Config Editor
+- **Cancel** button: Discards changes and closes editor
+
+**Keyboard Shortcuts:**
+- `DELETE` or `BACKSPACE`: Delete selected hotspot
+- `CTRL+D` (`CMD+D` on Mac): Duplicate selected hotspot
+- `ESC`: Cancel current drawing operation
+
+**Tips:**
+- ✅ Draw rectangles at any angle, they'll auto-align
+- ✅ Circles automatically snap to reasonable sizes
+- ✅ For polygons, click points carefully - double-click to finish
+- ✅ All coordinates are responsive (percentage-based)
+- ✅ Use View Mode to safely preview without accidental edits
+
+After creating hotspots visually, you can configure their action types (navigation, popup, tooltip, etc.) in the main Config Editor form.
+
+#### Option 2: Manual Entry (Traditional)
 
 1. Select a page from the sidebar
 2. Scroll to the "Hotspots" section

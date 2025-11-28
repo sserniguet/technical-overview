@@ -5,6 +5,7 @@ An interactive, configuration-driven presentation system for exploring technical
 ## Features
 
 - **🎨 Visual Configuration Editor**: Edit pages, upload images, and create hotspots using an intuitive UI - no JSON editing required!
+- **✏️ Visual Hotspot Editor**: Draw hotspots directly on images with mouse - no coordinate guessing! ⭐ NEW!
 - **🎯 Enhanced Hotspot System**: 7 different action types for rich interactivity ⭐ NEW!
   - 🔗 **Navigation** - Navigate to other pages
   - 🌐 **External Links** - Open URLs in new tabs
@@ -256,17 +257,23 @@ Press the **'H' key** during your presentation to reveal all hotspots on the cur
 - ✅ **Add/Edit Pages**: Create new pages with forms
 - ✅ **Upload Images**: Drag & drop image files
 - ✅ **Select Images**: Choose from dropdown of uploaded images
-- ✅ **Create Hotspots**: Add clickable regions visually with 7 action types! ⭐ NEW!
-  - 🔗 Navigate to pages
-  - 🌐 Link to external URLs
-  - 💬 Show tooltips on hover
-  - 📝 Display text popups
-  - 🖼️ Show images in modals
-  - 🎥 Play videos
-  - 🎬 Embed live demos
-- ✅ **Choose Shapes**: Rectangle, Circle, or Polygon from dropdown
-- ✅ **Set Coordinates**: Use number inputs (auto-validated 0-100)
-- ✅ **Configure Actions**: Select action type and configure content per hotspot ⭐ NEW!
+- ✅ **Create Hotspots Visually**: ⭐ NEW! Draw hotspots directly on images!
+  - **Visual Editor**: Click "✏️ Visual Editor" button to draw hotspots
+  - **Draw Mode**: Create rectangles, circles, and polygons by drawing
+  - **Edit Mode**: Move, resize, and adjust existing hotspots
+  - **No Manual Coordinates**: Draw with your mouse instead of typing numbers
+  - 7 action types supported:
+    - 🔗 Navigate to pages
+    - 🌐 Link to external URLs
+    - 💬 Show tooltips on hover
+    - 📝 Display text popups
+    - 🖼️ Show images in modals
+    - 🎥 Play videos
+    - 🎬 Embed live demos
+- ✅ **Manual Hotspot Creation**: Traditional form-based editing still available
+  - Choose shapes: Rectangle, Circle, or Polygon from dropdown
+  - Set coordinates: Use number inputs (auto-validated 0-100)
+  - Configure actions: Select action type and configure content per hotspot
 - ✅ **Backup Pages**: Archive pages with images before removing
 - ✅ **Restore Backups**: Bring back archived pages with automatic parent handling
 - ✅ **Export to Library**: Export selected pages to internal storage
@@ -279,11 +286,79 @@ Press the **'H' key** during your presentation to reveal all hotspots on the cur
 ### Features
 
 - **User-Friendly Forms**: No JSON syntax to remember
+- **Visual Hotspot Editor**: Draw hotspots directly on images ⭐ NEW!
 - **Image Preview**: See selected images before saving
 - **Dropdown Lists**: All options pre-populated
 - **Validation**: Coordinates auto-checked
 - **Live Preview**: Arrange windows side-by-side to see changes instantly
 - **Upload Support**: Add new images without file system access
+
+### Visual Hotspot Editor ⭐ NEW!
+
+The Visual Hotspot Editor allows you to draw hotspots directly on your images instead of manually entering coordinates.
+
+#### How to Access
+
+1. Open Config Editor: http://localhost:5173/config
+2. Select a page from the sidebar
+3. Scroll to the "Hotspots" section
+4. Click the **"✏️ Visual Editor"** button
+
+#### Draw Mode
+
+Create new hotspots by drawing on the image:
+
+- **Rectangle**: Click and drag to draw a rectangular hotspot
+- **Circle**: Click the center point, then drag to set the radius
+- **Polygon**: Click to add points, double-click to finish the polygon
+
+**Tips:**
+- Preview appears in real-time as you draw
+- Minimum size validation prevents tiny hotspots
+- Coordinates automatically converted to percentages (0-100)
+- All shapes respect image boundaries
+
+#### Edit Mode
+
+Modify existing hotspots:
+
+- **Select**: Click any hotspot to select it (turns gold)
+- **Move**: Drag selected hotspot to reposition
+- **Resize Rectangles**: Drag corner or edge handles
+- **Resize Circles**: Drag the radius handle
+- **Edit Polygons**: Drag individual polygon points
+- **Delete**: Press DELETE or BACKSPACE key
+- **Duplicate**: Press CTRL+D (CMD+D on Mac)
+
+#### View Mode
+
+Preview all hotspots without editing - safe viewing mode.
+
+#### Toolbar Controls
+
+- **Mode Switcher**: Toggle between Draw, Edit, and View modes
+- **Shape Selector**: Choose Rectangle, Circle, or Polygon (Draw mode only)
+- **Hints**: Contextual instructions for the current mode/tool
+- **Save**: Apply changes and return to Config Editor
+- **Cancel**: Discard changes and close editor
+
+#### Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| DELETE or BACKSPACE | Delete selected hotspot |
+| CTRL+D (CMD+D on Mac) | Duplicate selected hotspot |
+| ESC | Cancel current operation |
+
+#### Why Use Visual Editor?
+
+✅ **Faster**: Draw instead of calculating coordinates
+✅ **Accurate**: See exactly where hotspots will appear
+✅ **Intuitive**: Familiar drawing tools
+✅ **Responsive**: Automatic percentage-based coordinates
+✅ **Non-destructive**: Cancel button discards changes
+
+After creating hotspots visually, you can still configure their action types (navigation, popup, tooltip, etc.) in the regular Config Editor interface.
 
 ### Full Guide
 

@@ -9,12 +9,29 @@
 - Edit page properties (title, description, path, parent)
 - Upload images via drag & drop
 - Replace existing images
-- Create and edit hotspots visually
+- Create and edit hotspots visually with Visual Editor
 - Choose shapes (Rectangle, Circle, Polygon)
 - Set coordinates with validated inputs (0-100%)
 - Link pages through dropdowns
 - Real-time preview
 - Auto-save with live reload
+
+**✨ Visual Hotspot Editor:**
+- **Draw Mode**: Create hotspots by drawing directly on images
+  - Rectangle: Click and drag to draw
+  - Circle: Click center, drag to set radius
+  - Polygon: Click to add points, double-click to finish
+- **Edit Mode**: Select and modify existing hotspots
+  - Move hotspots by dragging
+  - Resize rectangles and circles
+  - Edit polygon points
+  - Delete hotspots (DEL key)
+  - Duplicate hotspots (Ctrl+D)
+- **View Mode**: Preview hotspots without editing
+- Interactive toolbar with mode switching
+- Real-time visual feedback
+- Percentage-based coordinates (responsive)
+- Fullscreen editor interface
 
 ### 🎯 Enhanced Hotspot System
 

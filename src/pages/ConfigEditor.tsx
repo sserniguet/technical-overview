@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { PageConfig, PresentationConfig, HotspotRegion, HotspotActionType } from '../types/presentation.types';
+import { HotspotEditor } from '../components/VisualEditor/HotspotEditor';
 import './ConfigEditor.css';
 
 const API_BASE = 'http://localhost:3001/api';
@@ -30,6 +31,7 @@ export function ConfigEditor() {
   const [selectedBackup, setSelectedBackup] = useState<string | null>(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showVisualEditor, setShowVisualEditor] = useState(false);
   const [selectedPageIds, setSelectedPageIds] = useState<Set<string>>(new Set());
   const [exportName, setExportName] = useState('');
   const [exportedPresentations, setExportedPresentations] = useState<ExportedPresentation[]>([]);
@@ -798,9 +800,14 @@ export function ConfigEditor() {
               <div className="form-section">
                 <div className="section-header">
                   <h3>Hotspots ({selectedPage.hotspots.length})</h3>
-                  <button className="btn-add" onClick={() => addHotspot(selectedPageIndex!)}>
-                    + Add Hotspot
-                  </button>
+                  <div className="button-group">
+                    <button className="btn-visual-editor" onClick={() => setShowVisualEditor(true)}>
+                      ✏️ Visual Editor
+                    </button>
+                    <button className="btn-add" onClick={() => addHotspot(selectedPageIndex!)}>
+                      + Add Hotspot
+                    </button>
+                  </div>
                 </div>
 
                 {selectedPage.hotspots.map((hotspot, hotspotIndex) => {
@@ -1475,6 +1482,21 @@ export function ConfigEditor() {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {showVisualEditor && selectedPageIndex !== null && config && (
+        <div className="modal-overlay-fullscreen">
+          <HotspotEditor
+            imageUrl={config.pages[selectedPageIndex].image}
+            initialHotspots={config.pages[selectedPageIndex].hotspots}
+            onSave={(updatedHotspots) => {
+              updatePage(selectedPageIndex, { hotspots: updatedHotspots });
+              setShowVisualEditor(false);
+              saveConfig();
+            }}
+            onCancel={() => setShowVisualEditor(false)}
+          />
         </div>
       )}
     </div>
