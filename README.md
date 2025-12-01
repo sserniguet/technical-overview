@@ -302,7 +302,7 @@ The Visual Hotspot Editor allows you to draw hotspots directly on your images in
 1. Open Config Editor: http://localhost:5173/config
 2. Select a page from the sidebar
 3. Scroll to the "Hotspots" section
-4. Click the **"✏️ Visual Editor"** button
+4. Click the **"✏️ Visual Editor"** button (green button)
 
 #### Draw Mode
 
@@ -339,8 +339,9 @@ Preview all hotspots without editing - safe viewing mode.
 - **Mode Switcher**: Toggle between Draw, Edit, and View modes
 - **Shape Selector**: Choose Rectangle, Circle, or Polygon (Draw mode only)
 - **Hints**: Contextual instructions for the current mode/tool
-- **Save**: Apply changes and return to Config Editor
-- **Cancel**: Discard changes and close editor
+- **💾 Save** (Blue): Save changes without closing (allows continuous editing)
+- **✅ Save & Close** (Green): Save changes and close the editor
+- **❌ Cancel** (Red): Discard changes and close editor
 
 #### Keyboard Shortcuts
 

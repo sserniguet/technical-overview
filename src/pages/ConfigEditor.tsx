@@ -1492,6 +1492,10 @@ export function ConfigEditor() {
             initialHotspots={config.pages[selectedPageIndex].hotspots}
             onSave={(updatedHotspots) => {
               updatePage(selectedPageIndex, { hotspots: updatedHotspots });
+              saveConfig();
+            }}
+            onSaveAndClose={(updatedHotspots) => {
+              updatePage(selectedPageIndex, { hotspots: updatedHotspots });
               setShowVisualEditor(false);
               saveConfig();
             }}

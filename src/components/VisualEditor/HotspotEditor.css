@@ -20,6 +20,31 @@
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   border-top: 1px solid var(--temenos-energy-violet);
   font-size: 13px;
+  gap: 12px;
+}
+
+.label-input {
+  flex: 1;
+  max-width: 300px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(100, 181, 246, 0.3);
+  border-radius: 4px;
+  color: white;
+  font-size: 13px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.label-input:focus {
+  outline: none;
+  border-color: var(--temenos-energy-violet);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.1);
+}
+
+.label-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .editor-shortcuts {

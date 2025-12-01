@@ -249,75 +249,7 @@
       "description": "Page for AzureDeployment",
       "image": "/images/AzureDeployment.png",
       "showInNav": false,
-      "hotspots": [
-        {
-          "id": "hotspot-1764322844957-ksxj6hi6i",
-          "shape": "rect",
-          "coords": {
-            "x": 61.68,
-            "y": 41.46,
-            "width": 14.759999999999998,
-            "height": 11.490000000000002
-          },
-          "actionType": "text-popup",
-          "label": "User Interface",
-          "content": {
-            "text": "This the user interface"
-          }
-        },
-        {
-          "id": "hotspot-1764322862977-lahpdze9e",
-          "shape": "rect",
-          "coords": {
-            "x": 61.36,
-            "y": 54.41,
-            "width": 14.810000000000002,
-            "height": 11.88000000000001
-          },
-          "actionType": "navigation",
-          "label": "New rect hotspot",
-          "content": {}
-        },
-        {
-          "id": "hotspot-1764322867164-0lnyo47k8",
-          "shape": "rect",
-          "coords": {
-            "x": 61.52,
-            "y": 69.27,
-            "width": 14.809999999999995,
-            "height": 11.200000000000003
-          },
-          "actionType": "navigation",
-          "label": "New rect hotspot",
-          "content": {}
-        },
-        {
-          "id": "hotspot-1764322871028-w9wjhawnh",
-          "shape": "rect",
-          "coords": {
-            "x": 61.47,
-            "y": 82.9,
-            "width": 14.86,
-            "height": 11.58999999999999
-          },
-          "actionType": "navigation",
-          "label": "New rect hotspot",
-          "content": {}
-        },
-        {
-          "id": "hotspot-1764322877307-3k9kvu7hg",
-          "shape": "rect",
-          "coords": {
-            "x": 81.37,
-            "y": 68.69,
-            "width": 7.589999999999989,
-            "height": 19.47
-          },
-          "actionType": "navigation",
-          "label": "New rect hotspot",
-          "content": {}
-        }
-      ],
+      "hotspots": [],
       "parent": "OperatingModel"
     },
     {
@@ -392,6 +324,112 @@
       "showInNav": true,
       "hotspots": [],
       "parent": "TechnologyPrinciple"
+    },
+    {
+      "id": "wfo-deployment",
+      "path": "/wfo-deployment",
+      "title": "WFO Deployment",
+      "description": "Cloud Deployment of Wealth Front-Office",
+      "image": "/images/WFO-Deployment.png",
+      "showInNav": true,
+      "hotspots": [
+        {
+          "id": "hotspot-1764327649721-xtvr2ep0y",
+          "shape": "rect",
+          "coords": {
+            "x": 40.87,
+            "y": 25.53,
+            "width": 13.220000000000006,
+            "height": 9.339999999999996
+          },
+          "actionType": "external-link",
+          "label": "Channel UI",
+          "content": {
+            "text": "Web User Interface \nfor Business user",
+            "url": "http://lauwlthbsgdemo2.temenosgroup.com:20080/FOPM/servletcontroller?SUBSESSIONID=0"
+          }
+        },
+        {
+          "id": "hotspot-1764327653083-2zt24grgi",
+          "shape": "rect",
+          "coords": {
+            "x": 40.87,
+            "y": 37.08,
+            "width": 13.11,
+            "height": 8.230000000000004
+          },
+          "actionType": "tooltip",
+          "label": "WUI and OData APIs",
+          "content": {
+            "text": "Old User Interface\nOData APIs"
+          }
+        },
+        {
+          "id": "hotspot-1764327660013-vevjky0i0",
+          "shape": "rect",
+          "coords": {
+            "x": 60.8,
+            "y": 25.78,
+            "width": 12.950000000000003,
+            "height": 8.469999999999999
+          },
+          "actionType": "navigation",
+          "label": "IRIS API",
+          "content": {}
+        },
+        {
+          "id": "hotspot-1764327664552-wk2bpa5eq",
+          "shape": "rect",
+          "coords": {
+            "x": 41.3,
+            "y": 74.92,
+            "width": 12.36,
+            "height": 8.230000000000004
+          },
+          "actionType": "navigation",
+          "label": "TWAC",
+          "content": {}
+        },
+        {
+          "id": "hotspot-1764327668170-wjhhrog7b",
+          "shape": "rect",
+          "coords": {
+            "x": 61.07,
+            "y": 36.83,
+            "width": 12.57,
+            "height": 7.990000000000002
+          },
+          "actionType": "navigation",
+          "label": "Batch",
+          "content": {}
+        },
+        {
+          "id": "hotspot-1764327671321-kk6n2a4c7",
+          "shape": "rect",
+          "coords": {
+            "x": 60.96,
+            "y": 74.8,
+            "width": 12.309999999999995,
+            "height": 8.350000000000009
+          },
+          "actionType": "navigation",
+          "label": "Outbox",
+          "content": {}
+        },
+        {
+          "id": "hotspot-1764327755021-4mfgx1xwi",
+          "shape": "rect",
+          "coords": {
+            "x": 40.66,
+            "y": 47.77,
+            "width": 13.270000000000003,
+            "height": 9.209999999999994
+          },
+          "actionType": "navigation",
+          "label": "Financial Server",
+          "content": {}
+        }
+      ]
     }
   ]
 }

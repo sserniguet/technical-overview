@@ -9,6 +9,7 @@ interface HotspotEditorProps {
   imageUrl: string;
   initialHotspots: HotspotRegion[];
   onSave: (hotspots: HotspotRegion[]) => void;
+  onSaveAndClose: (hotspots: HotspotRegion[]) => void;
   onCancel: () => void;
 }
 
@@ -28,6 +29,7 @@ export function HotspotEditor({
   imageUrl,
   initialHotspots,
   onSave,
+  onSaveAndClose,
   onCancel
 }: HotspotEditorProps) {
   const [mode, setMode] = useState<EditorMode>('draw');
@@ -284,6 +286,19 @@ export function HotspotEditor({
     onSave(hotspots);
   };
 
+  const handleSaveAndClose = () => {
+    onSaveAndClose(hotspots);
+  };
+
+  // Update hotspot label
+  const handleLabelChange = (newLabel: string) => {
+    if (!selectedHotspotId) return;
+
+    setHotspots(hotspots.map(h =>
+      h.id === selectedHotspotId ? { ...h, label: newLabel } : h
+    ));
+  };
+
   const hasChanges = JSON.stringify(hotspots) !== JSON.stringify(initialHotspots);
 
   return (
@@ -294,6 +309,7 @@ export function HotspotEditor({
         onModeChange={setMode}
         onShapeChange={setSelectedShape}
         onSave={handleSave}
+        onSaveAndClose={handleSaveAndClose}
         onCancel={onCancel}
         canSave={hasChanges}
       />
@@ -327,7 +343,14 @@ export function HotspotEditor({
 
       {mode === 'edit' && selectedHotspot && (
         <div className="editor-info">
-          <strong>Selected:</strong> {selectedHotspot.label}
+          <strong>Label:</strong>
+          <input
+            type="text"
+            className="label-input"
+            value={selectedHotspot.label}
+            onChange={(e) => handleLabelChange(e.target.value)}
+            placeholder="Enter hotspot label"
+          />
           <span className="editor-shortcuts">
             Delete: DEL | Duplicate: Ctrl+D
           </span>

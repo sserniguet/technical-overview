@@ -105,7 +105,7 @@ The easiest way to create hotspots!
 
 1. Select a page from the sidebar
 2. Scroll to the "Hotspots" section
-3. Click **"✏️ Visual Editor"** button
+3. Click **"✏️ Visual Editor"** button (green button)
 4. The fullscreen Visual Editor opens
 
 **Draw Mode** - Create new hotspots:
@@ -132,8 +132,9 @@ The easiest way to create hotspots!
 - Mode switcher (Draw/Edit/View)
 - Shape selector (Rectangle/Circle/Polygon)
 - Contextual hints based on active tool
-- **Save** button: Applies changes and returns to Config Editor
-- **Cancel** button: Discards changes and closes editor
+- **💾 Save** button (Blue): Saves changes without closing the editor (allows continuous editing)
+- **✅ Save & Close** button (Green): Saves changes and closes the editor
+- **❌ Cancel** button (Red): Discards changes and closes editor
 
 **Keyboard Shortcuts:**
 - `DELETE` or `BACKSPACE`: Delete selected hotspot

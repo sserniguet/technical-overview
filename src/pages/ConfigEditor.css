@@ -124,7 +124,7 @@
 }
 
 .btn-add {
-  background-color: var(--temenos-energy-violet);
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -133,10 +133,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
 }
 
 .btn-add:hover {
-  background-color: #6d3a95;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.5);
 }
 
 .pages-list {
@@ -490,7 +492,7 @@
 }
 
 .btn-visual-editor {
-  background: linear-gradient(135deg, var(--temenos-energy-violet) 0%, #6a3fa0 100%);
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -499,17 +501,37 @@
   font-weight: 600;
   font-size: 14px;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(130, 70, 175, 0.3);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
 }
 
 .btn-visual-editor:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(130, 70, 175, 0.5);
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.5);
 }
 
 .section-header .button-group {
   display: flex;
   gap: 10px;
+}
+
+.section-header .button-group .btn-visual-editor,
+.section-header .button-group .btn-add {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%) !important;
+  color: white !important;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.section-header .button-group .btn-visual-editor:hover,
+.section-header .button-group .btn-add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.5);
 }
 
 /* Responsive */

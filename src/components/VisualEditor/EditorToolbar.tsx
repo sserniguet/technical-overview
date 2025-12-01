@@ -10,6 +10,7 @@ interface EditorToolbarProps {
   onModeChange: (mode: EditorMode) => void;
   onShapeChange: (shape: HotspotShape) => void;
   onSave: () => void;
+  onSaveAndClose: () => void;
   onCancel: () => void;
   canSave: boolean;
 }
@@ -20,6 +21,7 @@ export function EditorToolbar({
   onModeChange,
   onShapeChange,
   onSave,
+  onSaveAndClose,
   onCancel,
   canSave
 }: EditorToolbarProps) {
@@ -104,9 +106,17 @@ export function EditorToolbar({
           className="btn-save"
           onClick={onSave}
           disabled={!canSave}
-          title="Save changes"
+          title="Save changes without closing"
         >
-          ✅ Save
+          💾 Save
+        </button>
+        <button
+          className="btn-save-close"
+          onClick={onSaveAndClose}
+          disabled={!canSave}
+          title="Save changes and close editor"
+        >
+          ✅ Save & Close
         </button>
         <button
           className="btn-cancel"

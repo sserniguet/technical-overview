@@ -1,6 +1,37 @@
 # Changelog
 
-## Latest Updates - Session 4 (2025-11-28)
+## Latest Updates - Session 5 (2025-11-28)
+
+### 🎨 UI/UX Improvements
+
+**Enhanced Visual Editor and Configuration Editor Button Styling:**
+
+#### Visual Editor Toolbar Updates
+- **Separated Save Functionality**: Split the single Save button into two distinct actions:
+  - **💾 Save** (Blue) - Saves changes without closing the editor, allowing continuous editing
+  - **✅ Save & Close** (Green) - Saves changes and closes the editor in one action
+  - **❌ Cancel** (Red) - Closes without saving (unchanged)
+- Updated `EditorToolbar.tsx` to support both `onSave` and `onSaveAndClose` callbacks
+- Updated `HotspotEditor.tsx` to handle separate save operations
+- Updated `ConfigEditor.tsx` to provide appropriate callbacks for each action
+
+#### Configuration Editor Button Visibility Fix
+- **Fixed Invisible Buttons**: Resolved issue where "Visual Editor" and "Add Hotspot" buttons had white text on white background
+- Changed both buttons from purple/blue to **green gradient** (`#4caf50` → `#45a049`)
+- Added `!important` CSS rules to ensure proper styling override
+- Enhanced hover effects with shadow animations
+- Applied to buttons in Hotspots section: `.section-header .button-group`
+
+**Files Modified:**
+- `src/components/VisualEditor/EditorToolbar.tsx` - Added onSaveAndClose prop and button
+- `src/components/VisualEditor/EditorToolbar.css` - Added .btn-save-close styles
+- `src/components/VisualEditor/HotspotEditor.tsx` - Implemented handleSaveAndClose
+- `src/pages/ConfigEditor.tsx` - Updated HotspotEditor callbacks
+- `src/pages/ConfigEditor.css` - Fixed button visibility with green gradient and specific selectors
+
+---
+
+## Session 4 (2025-11-28)
 
 ### ✨ Visual Hotspot Editor (Phases 5-7)
 
